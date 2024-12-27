@@ -33,9 +33,43 @@ public class PartnerRepository : IPartnerRepository
         return await connection.QueryAsync<Partner>(sql);
     }
 
-    public Task<Partner?> GetPartnerByIdAsync(int partnerId)
+    public async Task<Partner?> GetPartnerByIdAsync(int partnerId)
     {
-        throw new NotImplementedException();
+        await using var connection = new SqlConnection(_connectionString);
+        const string sql =
+            @"SELECT p.*, pol.*
+              FROM Partners p
+              LEFT JOIN Policies pol ON p.PartnerId = pol.PartnerId
+              WHERE p.PartnerId = @PartnerId";
+
+        var partnerDictionary = new Dictionary<int, Partner>();
+
+        await connection.QueryAsync<Partner, Policy, Partner>(
+            sql,
+            (partner, policy) =>
+            {
+                if (!partnerDictionary.TryGetValue(partner.PartnerId, out var partnerEntry))
+                {
+                    partnerEntry = partner;
+                    partnerDictionary.Add(partner.PartnerId, partnerEntry);
+                }
+
+                if (policy != null)
+                {
+                    partnerEntry.Policies.Add(policy);
+                }
+
+                return partnerEntry;
+            },
+
+            new
+            {
+                PartnerId = partnerId,
+            },
+            splitOn: "PolicyId"
+        );
+
+        return partnerDictionary.Values.FirstOrDefault();
     }
 
     public async Task<int> CreatePartnerAsync(Partner partner)

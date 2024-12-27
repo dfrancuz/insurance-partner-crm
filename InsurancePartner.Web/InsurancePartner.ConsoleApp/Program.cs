@@ -29,14 +29,26 @@ public static class Program
 
         var partner = new Partner
         {
-            FirstName = "John",
-            LastName = "Doe",
-            PartnerNumber = "12345678901234567890",
+            FirstName = "Aaron",
+            LastName = "King",
+            PartnerNumber = "12345670000234567890",
             PartnerTypeId = 1,
-            CreateByUser = "test@example.com",
+            CreateByUser = "aaron@example.com",
             IsForeign = false,
-            ExternalCode = "TESTCODE12345",
+            ExternalCode = "TESTCODE99999",
             Gender = 'M'
+        };
+
+        var partner1 = new Partner
+        {
+            FirstName = "Jessica",
+            LastName = "Jefferson",
+            PartnerNumber = "12345623201234567894",
+            PartnerTypeId = 1,
+            CreateByUser = "test2@example.com",
+            IsForeign = false,
+            ExternalCode = "TESTAAAA12345",
+            Gender = 'F'
         };
 
         try
@@ -44,6 +56,9 @@ public static class Program
             Console.WriteLine("Creating partner...");
             var id = await partnerRepo.CreatePartnerAsync(partner);
             Console.WriteLine($"Created partner with ID: {id}");
+
+            var id2 =  await partnerRepo.CreatePartnerAsync(partner1);
+            Console.WriteLine($"Created partner with ID: {id2}");
 
             Console.WriteLine("\nFetching all partners:");
             var partners = await partnerRepo.GetAllPartnersAsync();
@@ -55,13 +70,18 @@ public static class Program
             var policy = new Policy
             {
                 PartnerId = id,
-                PolicyNumber = "POL1234567890",
-                Amount = 1000.00m
+                PolicyNumber = "POL1664567899",
+                Amount = 109000.00m
             };
 
             Console.WriteLine("\nCreating policy...");
             var policyId = await policyRepo.CreatePolicyAsync(policy);
             Console.WriteLine($"Created policy with ID: {policyId}");
+
+            Console.WriteLine("\nFetching partner with policies:");
+            var partnerWithPolicies = await partnerRepo.GetPartnerByIdAsync(id);
+            Console.WriteLine($"Partner: {partnerWithPolicies.FirstName} {partnerWithPolicies.LastName}");
+            Console.WriteLine($"Number of policies: {partnerWithPolicies.Policies.Count}");
         }
         catch (Exception ex)
         {
