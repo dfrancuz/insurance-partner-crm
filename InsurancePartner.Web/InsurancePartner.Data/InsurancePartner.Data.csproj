@@ -9,8 +9,12 @@
     <ItemGroup>
       <PackageReference Include="Dapper" Version="2.1.35" />
       <PackageReference Include="Microsoft.Data.SqlClient" Version="6.0.0-preview3.24332.3" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="9.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.0" />
     </ItemGroup>
 
 </Project>
