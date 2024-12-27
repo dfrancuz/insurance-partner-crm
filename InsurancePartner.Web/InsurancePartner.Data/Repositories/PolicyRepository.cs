@@ -25,4 +25,28 @@ public class PolicyRepository : IPolicyRepository
 
         return await connection.ExecuteScalarAsync<int>(sql, policy);
     }
+
+    public async Task<IEnumerable<Policy>> GetPartnerPoliciesAsync(int partnerId)
+    {
+        await using var connection = new SqlConnection(_connectionString);
+        return await connection.QueryAsync<Policy>(
+            "SELECT * FROM Policies WHERE PartnerId = @PartnerId",
+            new
+            {
+                PartnerId = partnerId
+            });
+    }
+
+    public async Task<bool> PolicyNumberExistsAsync(string policyNumber)
+    {
+        await using var connection = new SqlConnection(_connectionString);
+        var count = await connection.ExecuteScalarAsync<int>(
+            "SELECT COUNT(1) FROM Policies WHERE PolicyNumber = @PolicyNumber",
+            new
+            {
+                PolicyNumber = policyNumber
+            });
+
+        return count > 0;
+    }
 }

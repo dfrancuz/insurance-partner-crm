@@ -1,5 +1,4 @@
 ﻿using InsurancePartner.Data.Configurations;
-using InsurancePartner.Data.Models;
 using InsurancePartner.Data.Repositories;
 using Microsoft.Extensions.Configuration;
 
@@ -27,61 +26,31 @@ public static class Program
         var partnerRepo = new PartnerRepository(dbConfig);
         var policyRepo = new PolicyRepository(dbConfig);
 
-        var partner = new Partner
-        {
-            FirstName = "Aaron",
-            LastName = "King",
-            PartnerNumber = "12345670000234567890",
-            PartnerTypeId = 1,
-            CreateByUser = "aaron@example.com",
-            IsForeign = false,
-            ExternalCode = "TESTCODE99999",
-            Gender = 'M'
-        };
-
-        var partner1 = new Partner
-        {
-            FirstName = "Jessica",
-            LastName = "Jefferson",
-            PartnerNumber = "12345623201234567894",
-            PartnerTypeId = 1,
-            CreateByUser = "test2@example.com",
-            IsForeign = false,
-            ExternalCode = "TESTAAAA12345",
-            Gender = 'F'
-        };
-
         try
         {
-            Console.WriteLine("Creating partner...");
-            var id = await partnerRepo.CreatePartnerAsync(partner);
-            Console.WriteLine($"Created partner with ID: {id}");
+            Console.WriteLine("\nChecking if partner number exists...");
+            var partnerNumberExists = await partnerRepo.PartnerNumberExistsAsync("12345678901234567890");
+            Console.WriteLine($"Partner number '{"12345678901234567890"}' exists: {partnerNumberExists}");
 
-            var id2 =  await partnerRepo.CreatePartnerAsync(partner1);
-            Console.WriteLine($"Created partner with ID: {id2}");
+            Console.WriteLine("\nFetching partner types...");
+            var partnerTypes = await partnerRepo.GetPartnerTypesAsync();
+            Console.WriteLine($"Partner Types: {string.Join(", ", partnerTypes.Select(pt => pt.TypeName))}");
 
-            Console.WriteLine("\nFetching all partners:");
-            var partners = await partnerRepo.GetAllPartnersAsync();
-            foreach (var p in partners)
-            {
-                Console.WriteLine($"- {p.FirstName} {p.LastName} (ID: {p.PartnerId})");
-            }
+            Console.WriteLine("\nChecking if policy number exists...");
+            var policyNumberExists = await policyRepo.PolicyNumberExistsAsync("POL1664567899");
+            Console.WriteLine($"Policy number '{"POL1664567899"}' exists: {policyNumberExists}");
 
-            var policy = new Policy
-            {
-                PartnerId = id,
-                PolicyNumber = "POL1664567899",
-                Amount = 109000.00m
-            };
+            Console.WriteLine("\nChecking if policy number exists...");
+            var policyNumberExists2 = await policyRepo.PolicyNumberExistsAsync("POL0000567899");
+            Console.WriteLine($"Policy number '{"POL1664567899"}' exists: {policyNumberExists2}");
 
-            Console.WriteLine("\nCreating policy...");
-            var policyId = await policyRepo.CreatePolicyAsync(policy);
-            Console.WriteLine($"Created policy with ID: {policyId}");
+            Console.WriteLine("\nFetching policies for partner...");
+            var partnerPolicies = await policyRepo.GetPartnerPoliciesAsync(1);
+            Console.WriteLine($"Policies for Partner {1}: {string.Join(", ", partnerPolicies.Select(p => p.PolicyNumber))}");
 
-            Console.WriteLine("\nFetching partner with policies:");
-            var partnerWithPolicies = await partnerRepo.GetPartnerByIdAsync(id);
-            Console.WriteLine($"Partner: {partnerWithPolicies.FirstName} {partnerWithPolicies.LastName}");
-            Console.WriteLine($"Number of policies: {partnerWithPolicies.Policies.Count}");
+            Console.WriteLine("\nFetching policies for partner...");
+            var partnerPolicies2 = await policyRepo.GetPartnerPoliciesAsync(3);
+            Console.WriteLine($"Policies for Partner {3}: {string.Join(", ", partnerPolicies2.Select(p => p.PolicyNumber))}");
         }
         catch (Exception ex)
         {

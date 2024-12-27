@@ -86,4 +86,36 @@ public class PartnerRepository : IPartnerRepository
 
         return await connection.ExecuteScalarAsync<int>(sql, partner);
     }
+
+    public async Task<IEnumerable<PartnerType>> GetPartnerTypesAsync()
+    {
+        await using var connection = new SqlConnection(_connectionString);
+        return await connection.QueryAsync<PartnerType>("SELECT * FROM PartnerTypes");
+    }
+
+    public async Task<bool> ExternalCodeExistsAsync(string externalCode)
+    {
+        await using var connection = new SqlConnection(_connectionString);
+        var count = await connection.ExecuteScalarAsync<int>(
+            "SELECT COUNT(1) FROM Partners WHERE ExternalCode = @ExternalCode",
+            new
+            {
+                ExternalCode = externalCode
+            });
+
+        return count > 0;
+    }
+
+    public async Task<bool> PartnerNumberExistsAsync(string partnerNumber)
+    {
+        await using var connection = new SqlConnection(_connectionString);
+        var count = await connection.ExecuteScalarAsync<int>(
+            "SELECT COUNT(1) FROM Partners WHERE PartnerNumber = @PartnerNumber",
+            new
+            {
+                PartnerNumber = partnerNumber
+            });
+
+        return count > 0;
+    }
 }

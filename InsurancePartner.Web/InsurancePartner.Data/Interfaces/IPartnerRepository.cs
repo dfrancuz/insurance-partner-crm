@@ -9,4 +9,10 @@ public interface IPartnerRepository
     Task<Partner?> GetPartnerByIdAsync(int partnerId);
 
     Task<int> CreatePartnerAsync(Partner partner);
+
+    Task<IEnumerable<PartnerType>> GetPartnerTypesAsync();
+
+    Task<bool> ExternalCodeExistsAsync(string externalCode);
+
+    Task<bool> PartnerNumberExistsAsync(string partnerNumber);
 }
