@@ -23,7 +23,8 @@ public class PartnerRepository : IPartnerRepository
                      COUNT(pol.PolicyId) as PolicyCount,
                      SUM(pol.Amount) as TotalPolicyAmount 
               FROM Partners p 
-              LEFT JOIN Policies pol ON p.PartnerId = pol.PartnerId 
+              LEFT JOIN PolicyPartners pp ON p.PartnerId = pp.PartnerId
+              LEFT JOIN Policies pol ON pp.PolicyId = pol.PolicyId
               GROUP BY p.PartnerId, p.FirstName, p.LastName, p.Address,
                        p.PartnerNumber, p.CroatianPIN, p.PartnerTypeId, 
                        p.CreatedAtUtc, p.CreateByUser, p.IsForeign, 
@@ -39,7 +40,8 @@ public class PartnerRepository : IPartnerRepository
         const string sql =
             @"SELECT p.*, pol.*
               FROM Partners p
-              LEFT JOIN Policies pol ON p.PartnerId = pol.PartnerId
+              LEFT JOIN PolicyPartners pp ON p.PartnerId = pp.PartnerId
+              LEFT JOIN Policies pol ON pp.PolicyId = pol.PolicyId
               WHERE p.PartnerId = @PartnerId";
 
         var partnerDictionary = new Dictionary<int, Partner>();
@@ -111,16 +113,36 @@ public class PartnerRepository : IPartnerRepository
     public async Task<bool> DeletePartnerAsync(int partnerId)
     {
         await using var connection = new SqlConnection(_connectionString);
-        const string sql = "DELETE FROM Partners WHERE PartnerId = @PartnerId";
+        await connection.OpenAsync();
 
-        var rowsAffected = await connection.ExecuteAsync(
-            sql,
-            new
+        await using var transaction = await connection.BeginTransactionAsync();
+
+        try
+        {
+            const string sql = @"DELETE FROM Partners WHERE PartnerId = @PartnerId";
+
+            var rowsAffected = await connection.ExecuteAsync(
+                sql,
+                new
+                {
+                    PartnerId = partnerId
+                },
+                transaction: transaction);
+
+            if (rowsAffected == 0)
             {
-                PartnerId = partnerId
-            });
+                return false;
+            }
 
-        return rowsAffected > 0;
+            await transaction.CommitAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            await transaction.RollbackAsync();
+            return false;
+        }
     }
 
     public async Task<IEnumerable<PartnerType>> GetPartnerTypesAsync()
