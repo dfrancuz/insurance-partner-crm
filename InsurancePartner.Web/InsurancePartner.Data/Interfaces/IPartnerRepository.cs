@@ -10,6 +10,10 @@ public interface IPartnerRepository
 
     Task<int> CreatePartnerAsync(Partner partner);
 
+    Task<bool> UpdatePartnerAsync(Partner partner);
+
+    Task<bool> DeletePartnerAsync(int partnerId);
+
     Task<IEnumerable<PartnerType>> GetPartnerTypesAsync();
 
     Task<bool> ExternalCodeExistsAsync(string externalCode);

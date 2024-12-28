@@ -1,4 +1,5 @@
 ﻿using InsurancePartner.Data.Configurations;
+using InsurancePartner.Data.Models;
 using InsurancePartner.Data.Repositories;
 using Microsoft.Extensions.Configuration;
 
@@ -28,29 +29,29 @@ public static class Program
 
         try
         {
-            Console.WriteLine("\nChecking if partner number exists...");
-            var partnerNumberExists = await partnerRepo.PartnerNumberExistsAsync("12345678901234567890");
-            Console.WriteLine($"Partner number '{"12345678901234567890"}' exists: {partnerNumberExists}");
+            Console.WriteLine("\nUpdating partner...");
+            var partnerToUpdate = new Partner
+            {
+                PartnerId = 1,
+                FirstName = "UpdatedFirstName",
+                LastName = "UpdatedLastName",
+                Address = "UpdatedAddress",
+                PartnerNumber = "12345678901234567890",
+                CroatianPIN = "12345678911",
+                PartnerTypeId = 2,
+                CreateByUser = "test@example.com",
+                IsForeign = false,
+                ExternalCode = "TESTCODE12345",
+                Gender = 'M'
+            };
 
-            Console.WriteLine("\nFetching partner types...");
-            var partnerTypes = await partnerRepo.GetPartnerTypesAsync();
-            Console.WriteLine($"Partner Types: {string.Join(", ", partnerTypes.Select(pt => pt.TypeName))}");
+            var updateResult = await partnerRepo.UpdatePartnerAsync(partnerToUpdate);
+            Console.WriteLine(updateResult ? "Update successful" : "Update failed");
 
-            Console.WriteLine("\nChecking if policy number exists...");
-            var policyNumberExists = await policyRepo.PolicyNumberExistsAsync("POL1664567899");
-            Console.WriteLine($"Policy number '{"POL1664567899"}' exists: {policyNumberExists}");
-
-            Console.WriteLine("\nChecking if policy number exists...");
-            var policyNumberExists2 = await policyRepo.PolicyNumberExistsAsync("POL0000567899");
-            Console.WriteLine($"Policy number '{"POL1664567899"}' exists: {policyNumberExists2}");
-
-            Console.WriteLine("\nFetching policies for partner...");
-            var partnerPolicies = await policyRepo.GetPartnerPoliciesAsync(1);
-            Console.WriteLine($"Policies for Partner {1}: {string.Join(", ", partnerPolicies.Select(p => p.PolicyNumber))}");
-
-            Console.WriteLine("\nFetching policies for partner...");
-            var partnerPolicies2 = await policyRepo.GetPartnerPoliciesAsync(3);
-            Console.WriteLine($"Policies for Partner {3}: {string.Join(", ", partnerPolicies2.Select(p => p.PolicyNumber))}");
+            Console.WriteLine("\nDeleting partner...");
+            var partnerIdToDelete = 1;
+            var deleteResult = await partnerRepo.DeletePartnerAsync(partnerIdToDelete);
+            Console.WriteLine(deleteResult ? "Delete successful" : "Delete failed");
         }
         catch (Exception ex)
         {

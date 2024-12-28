@@ -87,6 +87,42 @@ public class PartnerRepository : IPartnerRepository
         return await connection.ExecuteScalarAsync<int>(sql, partner);
     }
 
+    public async Task<bool> UpdatePartnerAsync(Partner partner)
+    {
+        await using var connection = new SqlConnection(_connectionString);
+        const string sql =
+            @"UPDATE Partners
+              SET FirstName = @FirstName,
+                  LastName = @LastName,
+                  Address = @Address,
+                  PartnerNumber = @PartnerNumber,
+                  CroatianPIN = @CroatianPIN,
+                  PartnerTypeId = @PartnerTypeId,
+                  CreateByUser = @CreateByUser,
+                  IsForeign = @IsForeign,
+                  ExternalCode = @ExternalCode,
+                  Gender = @Gender
+              WHERE PartnerId = @PartnerId";
+
+        var rowsAffected = await connection.ExecuteAsync(sql, partner);
+        return rowsAffected > 0;
+    }
+
+    public async Task<bool> DeletePartnerAsync(int partnerId)
+    {
+        await using var connection = new SqlConnection(_connectionString);
+        const string sql = "DELETE FROM Partners WHERE PartnerId = @PartnerId";
+
+        var rowsAffected = await connection.ExecuteAsync(
+            sql,
+            new
+            {
+                PartnerId = partnerId
+            });
+
+        return rowsAffected > 0;
+    }
+
     public async Task<IEnumerable<PartnerType>> GetPartnerTypesAsync()
     {
         await using var connection = new SqlConnection(_connectionString);
