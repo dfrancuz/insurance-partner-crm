@@ -23,8 +23,14 @@ CREATE TABLE Partners (
 
 CREATE TABLE Policies (
     PolicyId INT IDENTITY PRIMARY KEY,
-    PartnerId INT NOT NULL,
     PolicyNumber NVARCHAR(15) NOT NULL CHECK (LEN(PolicyNumber) >= 10),
     Amount DECIMAL(14,2) NOT NULL,
+    CreatedAtUtc DATETIME2 NOT NULL DEFAULT GETUTCDATE()
+);
+
+CREATE TABLE PolicyPartners (
+    PolicyPartnerId INT IDENTITY PRIMARY KEY,
+    PolicyId INT NOT NULL,
+    PartnerId INT NOT NULL,
     CreatedAtUtc DATETIME2 NOT NULL DEFAULT GETUTCDATE()
 );
