@@ -1,10 +1,10 @@
-using InsurancePartner.Data.Configurations;
-using InsurancePartner.Data.Interfaces;
-using InsurancePartner.Data.Repositories;
+namespace InsurancePartner.Data.DependencyInjection;
+
+using Configurations;
+using Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
-namespace InsurancePartner.Data.DependencyInjection;
+using Repositories;
 
 public static class DataLayerServiceCollectionExtensions
 {

@@ -1,10 +1,10 @@
-using Dapper;
-using InsurancePartner.Data.Configurations;
-using InsurancePartner.Data.Interfaces;
-using InsurancePartner.Data.Models;
-using Microsoft.Data.SqlClient;
-
 namespace InsurancePartner.Data.Repositories;
+
+using Configurations;
+using Dapper;
+using Interfaces;
+using Microsoft.Data.SqlClient;
+using Models;
 
 public class PartnerRepository : IPartnerRepository
 {

@@ -1,6 +1,6 @@
-using InsurancePartner.Data.Models;
-
 namespace InsurancePartner.Data.Interfaces;
+
+using Models;
 
 public interface IPolicyRepository
 {
