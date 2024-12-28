@@ -8,6 +8,8 @@ public class Partner
 
     public required string LastName { get; set; }
 
+    public string FullName => $"{FirstName} {LastName}";
+
     public string? Address { get; set; }
 
     public string PartnerNumber { get; set; }
