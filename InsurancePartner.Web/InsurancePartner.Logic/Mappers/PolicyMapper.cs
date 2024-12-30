@@ -1,7 +1,7 @@
-using InsurancePartner.Data.Models;
-using InsurancePartner.Logic.DTOs;
-
 namespace InsurancePartner.Logic.Mappers;
+
+using Data.Models;
+using DTOs;
 
 public class PolicyMapper
 {
@@ -21,7 +21,7 @@ public class PolicyMapper
         };
     }
 
-    public static Policy ToEntity(CreatePolicyDto policyDto)
+    public static Policy ToEntity(PolicyDto policyDto)
     {
         return new Policy
         {

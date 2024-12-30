@@ -1,7 +1,7 @@
-using InsurancePartner.Data.Models;
-using InsurancePartner.Logic.DTOs;
-
 namespace InsurancePartner.Logic.Mappers;
+
+using Data.Models;
+using DTOs;
 
 public class PartnerTypeMapper
 {

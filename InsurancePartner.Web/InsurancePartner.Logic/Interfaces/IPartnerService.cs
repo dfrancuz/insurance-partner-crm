@@ -1,6 +1,6 @@
-using InsurancePartner.Logic.DTOs;
-
 namespace InsurancePartner.Logic.Interfaces;
+
+using DTOs;
 
 public interface IPartnerService
 {
@@ -10,7 +10,7 @@ public interface IPartnerService
 
     Task<(bool IsSuccess, string Message)> CreatePartnerAsync(CreatePartnerDto partnerDto);
 
-    Task<(bool IsSuccess, string Message)> UpdatePartnerAsync(int partnerId);
+    Task<(bool IsSuccess, string Message)> UpdatePartnerAsync(PartnerDto partnerDto);
 
     Task<(bool IsSuccess, string Message)> DeletePartnerAsync(int partnerId);
 

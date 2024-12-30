@@ -1,143 +1,93 @@
-﻿namespace InsurancePartner.ConsoleApp;
+﻿using InsurancePartner.Data.Configurations;
+using InsurancePartner.Data.Repositories;
+using InsurancePartner.Logic.DTOs;
+using InsurancePartner.Logic.Services;
+using InsurancePartner.Logic.Validators;
+using Microsoft.Extensions.Configuration;
 
-using Data.Models;
-using Logic.DTOs;
-using Logic.Mappers;
+namespace InsurancePartner.ConsoleApp;
 
 public static class Program
 {
-    public static void Main()
+    public static async Task Main()
     {
-        Test();
+        await TestAsync();
     }
 
-    private static void Test()
+    private static async Task TestAsync()
     {
-        var policy = new Policy
-        {
-            PolicyId = 1,
-            PolicyNumber = "P123",
-            Amount = 1000,
-            CreatedAtUtc = DateTime.UtcNow
-        };
-
-        var partner = new Partner
-        {
-            PartnerId = 1,
-            FirstName = "John",
-            LastName = "Doe",
-            PartnerNumber = "PN123",
-            CroatianPIN = "12345678901",
-            PartnerTypeId = 1,
-            CreatedAtUtc = DateTime.UtcNow,
-            CreateByUser = "admin@admin.com",
-            IsForeign = false,
-            ExternalCode = "EXT123",
-            Gender = 'M',
-            Policies =
-            [
-                new Policy { PolicyId = 1, PolicyNumber = "P123", Amount = 1000, CreatedAtUtc = DateTime.UtcNow },
-                new Policy { PolicyId = 2, PolicyNumber = "P124", Amount = 2000, CreatedAtUtc = DateTime.UtcNow }
-            ]
-        };
-
-        var createPartnerDto = new CreatePartnerDto
-        {
-            FirstName = "Jane",
-            LastName = "Doe",
-            PartnerNumber = "PN456",
-            CroatianPIN = "98765432109",
-            PartnerTypeId = 2,
-            CreateByUser = "user1@example.com",
-            IsForeign = true,
-            ExternalCode = "EXT456",
-            Gender = 'F'
-        };
-
-        var invalidPartnerDto = new CreatePartnerDto
-        {
-            FirstName = "Invalid",
-            PartnerNumber = "PN999",
-            CroatianPIN = "12345678901",
-            PartnerTypeId = 1,
-            CreateByUser = "admin@admin.com",
-            IsForeign = false,
-            ExternalCode = "EXT999",
-            Gender = 'M'
-        };
-
-        var partnerWithManyPolicies = new Partner
-        {
-            PartnerId = 3,
-            FirstName = "John",
-            LastName = "Doe",
-            PartnerNumber = "PN1000",
-            CroatianPIN = "12345678902",
-            PartnerTypeId = 3,
-            CreatedAtUtc = DateTime.UtcNow,
-            CreateByUser = "someone@at.com",
-            IsForeign = false,
-            ExternalCode = "EXT1000",
-            Gender = 'M',
-            Policies = new List<Policy>()
-        };
-
-        var createPolicyDto = new CreatePolicyDto
-        {
-            PolicyNumber = "P125",
-            Amount = 5000
-        };
-
         try
         {
-            // Test Case 1: Valid partner object
-            var partnerDto = PartnerMapper.ToDto(partner);
-            Console.WriteLine($"Partner DTO: PartnerId: {partnerDto.PartnerId}, Full Name: {partnerDto.FullName}, Policies Count: {partnerDto.Policies.Count}");
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
 
-            // Test Case 2: Null partner object (should return null)
-            Partner nullPartner = null;
-            var nullPartnerDto = PartnerMapper.ToDto(nullPartner);
-            Console.WriteLine($"Null Partner DTO: {nullPartnerDto}");
-
-            // Test Case 3: Valid policy object
-            var policyDto = PolicyMapper.ToDto(policy);
-            Console.WriteLine($"Policy DTO: PolicyId: {policyDto.PolicyId}, PolicyNumber: {policyDto.PolicyNumber}, Amount: {policyDto.Amount}");
-
-            // Test Case 4: Null policy object (should return null)
-            Policy nullPolicy = null;
-            var nullPolicyDto = PolicyMapper.ToDto(nullPolicy);
-            Console.WriteLine($"Null Policy DTO: {nullPolicyDto}");
-
-            // Test Case 5: Valid CreatePartnerDto to Partner conversion
-            var partnerFromDto = PartnerMapper.ToEntity(createPartnerDto);
-            Console.WriteLine($"Partner from DTO: {partnerFromDto.FirstName} {partnerFromDto.LastName}");
-
-            // Test Case 6: Valid CreatePolicyDto to Policy conversion
-            var policyFromDto = PolicyMapper.ToEntity(createPolicyDto);
-            Console.WriteLine($"Policy from DTO: {policyFromDto.PolicyNumber}, Amount: {policyFromDto.Amount}");
-
-            // Test Case 7: Invalid DTO with missing required fields
-            var partnerFromInvalidDto = PartnerMapper.ToEntity(invalidPartnerDto);
-            Console.WriteLine($"Partner from Invalid DTO: {partnerFromInvalidDto.FirstName} {partnerFromInvalidDto.LastName}");
-
-            // Test Case 8: Partner with a large number of policies
-            for (var i = 0; i < 1000; i++)
+            var dbConfig = new DatabaseConfig
             {
-                partnerWithManyPolicies.Policies.Add(new Policy
-                {
-                    PolicyId = i + 1,
-                    PolicyNumber = $"P{i + 1}",
-                    Amount = 1000 + (i * 100),
-                    CreatedAtUtc = DateTime.UtcNow
-                });
+                ConnectionString = configuration.GetConnectionString("DefaultConnection")
+            };
+
+            var partnerRepo = new PartnerRepository(dbConfig);
+            var policyRepo = new PolicyRepository(dbConfig);
+
+            var createPartnerValidator = new CreatePartnerValidator(partnerRepo);
+            var updatePartnerValidator = new UpdatePartnerValidator(partnerRepo);
+
+            var partnerService =
+                new PartnerService(partnerRepo, policyRepo, createPartnerValidator, updatePartnerValidator);
+
+            var newPartner = new CreatePartnerDto
+            {
+                FirstName = "Partner1 FirstName",
+                LastName = "Partner1 LastName",
+                PartnerNumber = "99999999991111111111",
+                PartnerTypeId = 1,
+                CreateByUser = "user1@user1.com",
+                IsForeign = true,
+                ExternalCode = "111222333444",
+                Gender = 'M',
+                SelectedPolicyIds = [1, 3]
+            };
+
+            // 1. Create a new partner...
+            var createdResult = await partnerService.CreatePartnerAsync(newPartner);
+            Console.WriteLine(createdResult.IsSuccess
+                ? "Partner created successfully"
+                : $"Failed to create partner: {createdResult.Message}");
+
+            // 2. Get all partners...
+            var partners = await partnerService.GetAllPartnersAsync();
+            foreach (var partner in partners)
+            {
+                Console.WriteLine($"Partner: {partner.FirstName} {partner.LastName}, Partner Number: {partner.PartnerNumber}");
             }
 
-            var partnerWithManyPoliciesDto = PartnerMapper.ToDto(partnerWithManyPolicies);
-            Console.WriteLine($"Partner with Many Policies DTO: PartnerId: {partnerWithManyPoliciesDto.PartnerId}, " +
-                              $"Policies Count: {partnerWithManyPoliciesDto.Policies.Count}, " +
-                              $"Total Amount: {partnerWithManyPoliciesDto.Policies.Sum(p => p.Amount)}, " +
-                              $"Is high risk? {partnerWithManyPoliciesDto.IsHighRisk}");
+            // 3. Update a partner...
+            var existingPartner = partners.FirstOrDefault();
+            if (existingPartner != null)
+            {
+                existingPartner.FirstName = "Updated Partner Name";
+                existingPartner.Address = "465 Updated Street";
+                existingPartner.PartnerNumber = "99999999991111111111";
+                existingPartner.ExternalCode = "111222333444";
+
+                var updateResult = await partnerService.UpdatePartnerAsync(existingPartner);
+                Console.WriteLine(updateResult.IsSuccess
+                    ? "Partner updated successfully"
+                    : $"Failed to update partner: {updateResult.Message}");
+            }
+
+            // 4. Delete a partner...
+            if (existingPartner != null)
+            {
+                var deleteResult = await partnerService.DeletePartnerAsync(existingPartner.PartnerId);
+                Console.WriteLine(deleteResult.IsSuccess
+                    ? "Partner deleted successfully"
+                    : $"Failed to delete partner: {deleteResult.Message}");
+            }
         }
+
         catch (Exception ex)
         {
             Console.WriteLine($"Error: {ex.Message}");

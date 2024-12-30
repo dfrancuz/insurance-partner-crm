@@ -1,5 +1,3 @@
-using System.Security.Cryptography;
-
 namespace InsurancePartner.Logic.DTOs;
 
 public class PartnerDto

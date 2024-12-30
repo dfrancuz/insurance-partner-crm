@@ -21,4 +21,6 @@ public class CreatePartnerDto
     public string ExternalCode { get; set; }
 
     public char Gender { get; set; }
+
+    public List<int> SelectedPolicyIds { get; set; } = [];
 }
