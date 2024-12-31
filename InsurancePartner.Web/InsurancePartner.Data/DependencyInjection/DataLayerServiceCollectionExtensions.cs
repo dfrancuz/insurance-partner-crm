@@ -10,7 +10,12 @@ public static class DataLayerServiceCollectionExtensions
 {
     public static IServiceCollection AddDataLayer(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<DatabaseConfig>(configuration.GetSection("DatabaseConfig"));
+        var dbConfig = new DatabaseConfig
+        {
+            ConnectionString = configuration.GetConnectionString("DefaultConnection")
+        };
+
+        services.AddSingleton(dbConfig);
 
         services.AddScoped<IPartnerRepository, PartnerRepository>();
         services.AddScoped<IPolicyRepository, PolicyRepository>();
