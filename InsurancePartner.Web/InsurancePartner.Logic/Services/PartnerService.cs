@@ -9,18 +9,18 @@ using Validators;
 public class PartnerService : IPartnerService
 {
     private readonly IPartnerRepository _partnerRepository;
-    private readonly IPolicyRepository _policyRepository;
+    private readonly IPolicyService _policyService;
     private readonly CreatePartnerValidator _createPartnerValidator;
     private readonly UpdatePartnerValidator _updatePartnerValidator;
 
     public PartnerService(
         IPartnerRepository partnerRepository,
-        IPolicyRepository policyRepository,
+        IPolicyService policyService,
         CreatePartnerValidator createPartnerValidator,
         UpdatePartnerValidator updatePartnerValidator)
     {
         _partnerRepository = partnerRepository;
-        _policyRepository = policyRepository;
+        _policyService = policyService;
         _createPartnerValidator = createPartnerValidator;
         _updatePartnerValidator = updatePartnerValidator;
     }
@@ -53,7 +53,7 @@ public class PartnerService : IPartnerService
         {
             foreach (var policyId in partnerDto.SelectedPolicyIds)
             {
-                var result = await _policyRepository.AssignPolicyToPartnerAsync(policyId, partnerId);
+                var result = await _policyService.AssignPolicyToPartnerAsync(policyId, partnerId);
                 if (result < 0)
                 {
                     return (false, "Failed to assign policy to partner.");

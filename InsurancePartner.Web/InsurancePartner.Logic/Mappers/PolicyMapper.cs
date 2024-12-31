@@ -25,6 +25,22 @@ public class PolicyMapper
     {
         return new Policy
         {
+            PolicyId = policyDto.PolicyId,
+            PolicyNumber = policyDto.PolicyNumber,
+            Amount = policyDto.Amount,
+            CreatedAtUtc = policyDto.CreatedAtUtc
+        };
+    }
+
+    public static Policy ToEntity(CreatePolicyDto policyDto)
+    {
+        if (policyDto == null)
+        {
+            return null;
+        }
+
+        return new Policy
+        {
             PolicyNumber = policyDto.PolicyNumber,
             Amount = policyDto.Amount,
             CreatedAtUtc = DateTime.UtcNow
