@@ -1,0 +1,48 @@
+@model IEnumerable<InsurancePartner.Web.Models.PartnerViewModels.PartnerListViewModel>
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+    <title>title</title>
+</head>
+<body>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Insurance Partners</h2>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Full Name</th>
+            <th>Partner Number</th>
+            <th>Croatian PIN</th>
+            <th>Partner Type</th>
+            <th>Created Date</th>
+            <th>Foreign</th>
+            <th>Gender</th>
+        </tr>
+        </thead>
+        <tbody>
+            @foreach (var partner in Model)
+            {
+                <tr>
+                    <td>@(partner.HasSpecialStatus ? "*" : "")@partner.FullName</td>
+                    <td>@partner.PartnerNumber</td>
+                    <td>@partner.CroatianPIN</td>
+                    <td>@(partner.PartnerTypeId == 1 ? "Personal" : "Legal")</td>
+                    <td>@partner.CreatedAtUtc.ToString("g")</td>
+                    <td>@(partner.IsForeign ? "Yes" : "No")</td>
+                    <td>@partner.Gender</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

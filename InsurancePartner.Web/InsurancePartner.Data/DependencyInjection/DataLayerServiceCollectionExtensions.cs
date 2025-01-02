@@ -10,9 +10,15 @@ public static class DataLayerServiceCollectionExtensions
 {
     public static IServiceCollection AddDataLayer(this IServiceCollection services, IConfiguration configuration)
     {
+        var connectionString = configuration.GetSection("DatabaseConfig:ConnectionString").Value;
+
+        if (string.IsNullOrEmpty(connectionString))
+        {
+            throw new ArgumentNullException("The ConnectionString property has not been initialized or is missing.");
+        }
         var dbConfig = new DatabaseConfig
         {
-            ConnectionString = configuration.GetConnectionString("DefaultConnection")
+            ConnectionString = connectionString
         };
 
         services.AddSingleton(dbConfig);
