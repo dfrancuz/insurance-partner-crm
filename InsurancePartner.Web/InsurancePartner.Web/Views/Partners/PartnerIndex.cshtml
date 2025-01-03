@@ -45,7 +45,9 @@
             }
             @foreach (var partner in Model)
             {
-                <tr>
+                <tr class="partner-row @(partner.HasSpecialStatus ? "table-info" : "")"
+                    data-partner-id="@partner.PartnerId"
+                    style="cursor: pointer">
                     <td>
                         @counter.
                     </td>
@@ -77,5 +79,38 @@
         </table>
     }
 </div>
+
+<!-- Modal for partner details -->
+<div class="modal fade" id="partnerDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Partner Details</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Details will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 </html>
+
+@section Scripts {
+    <script>
+    $(document).ready(function() {
+        $('.partner-row').click(function() {
+            var partnerId = $(this).data('partner-id');
+
+            $.get('/partners/' + partnerId, function(data) {
+                $('#partnerDetailsModal .modal-body').html(data);
+                $('#partnerDetailsModal').modal('show');
+            });
+        });
+    });
+</script>
+}

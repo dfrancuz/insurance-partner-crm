@@ -16,8 +16,8 @@ public class PartnersController : Controller
         _policyService = policyService;
     }
 
-    // GET /partners/index
-    [HttpGet("index")]
+    // GET /partners
+    [HttpGet]
     public async Task<IActionResult> PartnerIndex()
     {
         var partners = await _partnerService.GetAllPartnersAsync();
@@ -37,5 +37,34 @@ public class PartnersController : Controller
         }).OrderByDescending(p => p.CreatedAtUtc);
 
         return View(viewModels);
+    }
+
+    [HttpGet("{partnerId}")]
+    public async Task<IActionResult> Details(int partnerId)
+    {
+        var partner = await _partnerService.GetPartnerByIdAsync(partnerId);
+
+        if (partner == null)
+        {
+            return NotFound();
+        }
+
+        var viewModel = new PartnerDetailsViewModel
+        {
+            PartnerId = partner.PartnerId,
+            FullName = partner.FullName,
+            Address = partner.Address,
+            PartnerNubmer = partner.PartnerNumber,
+            CroatianPIN = partner.CroatianPIN,
+            PartnerTypeId = partner.PartnerTypeId,
+            CreatedAtUtc = partner.CreatedAtUtc,
+            CreateByUser = partner.CreateByUser,
+            IsForeign = partner.IsForeign,
+            ExternalCode = partner.ExternalCode,
+            Gender = partner.Gender,
+            Policies = partner.Policies
+        };
+
+        return PartialView("_PartnerDetails", viewModel);
     }
 }
