@@ -4,6 +4,7 @@ using Logic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Models.PartnerViewModels;
 
+[Route("partners")]
 public class PartnersController : Controller
 {
     private readonly IPartnerService _partnerService;
@@ -15,7 +16,8 @@ public class PartnersController : Controller
         _policyService = policyService;
     }
 
-    // GET /Partners/PartnerIndex
+    // GET /partners/index
+    [HttpGet("index")]
     public async Task<IActionResult> PartnerIndex()
     {
         var partners = await _partnerService.GetAllPartnersAsync();
