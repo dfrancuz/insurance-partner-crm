@@ -1,22 +1,22 @@
-using InsurancePartner.Logic.Interfaces;
-using InsurancePartner.Web.Models.PartnerViewModels;
-using Microsoft.AspNetCore.Mvc;
-
 namespace InsurancePartner.Web.Controllers;
 
-public class PartnerController : Controller
+using Logic.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Models.PartnerViewModels;
+
+public class PartnersController : Controller
 {
     private readonly IPartnerService _partnerService;
     private readonly IPolicyService _policyService;
 
-    public PartnerController(IPartnerService partnerService, IPolicyService policyService)
+    public PartnersController(IPartnerService partnerService, IPolicyService policyService)
     {
         _partnerService = partnerService;
         _policyService = policyService;
     }
 
-    // GET
-    public async Task<IActionResult> Index()
+    // GET /Partners/PartnerIndex
+    public async Task<IActionResult> PartnerIndex()
     {
         var partners = await _partnerService.GetAllPartnersAsync();
         var viewModels = partners.Select(p => new PartnerListViewModel

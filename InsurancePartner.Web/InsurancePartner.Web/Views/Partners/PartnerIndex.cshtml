@@ -1,0 +1,81 @@
+@model IEnumerable<InsurancePartner.Web.Models.PartnerViewModels.PartnerListViewModel>
+
+@{
+    ViewData["Title"] = "Partners";
+}
+
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+    <title>Partners</title>
+</head>
+<body>
+<div class="text-center">
+    <p class="display-4">Welcome to the Partners Page</p>
+</div>
+<div class="text-center">
+    @if (!Model.Any())
+    {
+        <p>No partners available.</p>
+        <a asp-action="" class="text-decoration-none">+ Add Partner</a>
+    }
+    else
+    {
+        <p>
+            <a asp-action="" class="text-decoration-none">+ Add Partner</a>
+        </p>
+        <h3>Partners</h3>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>No.</th>
+                <th>Full Name</th>
+                <th>Partner Number</th>
+                <th>Croatian PIN</th>
+                <th>Partner Type</th>
+                <th>Created Date</th>
+                <th>Foreign</th>
+                <th>Gender</th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                var counter = 1;
+            }
+            @foreach (var partner in Model)
+            {
+                <tr>
+                    <td>
+                        @counter.
+                    </td>
+                    <td>
+                        @(partner.HasSpecialStatus ? "*" : "")@partner.FullName
+                    </td>
+                    <td>
+                        @partner.PartnerNumber
+                    </td>
+                    <td>
+                        @partner.CroatianPIN
+                    </td>
+                    <td>
+                        @(partner.PartnerTypeId == 1 ? "Personal" : "Legal")
+                    </td>
+                    <td>
+                        @partner.CreatedAtUtc.ToString("g")
+                    </td>
+                    <td>
+                        @(partner.IsForeign ? "Yes" : "No")
+                    </td>
+                    <td>
+                        @partner.Gender
+                    </td>
+                </tr>
+                counter++;
+            }
+            </tbody>
+        </table>
+    }
+</div>
+</body>
+</html>
