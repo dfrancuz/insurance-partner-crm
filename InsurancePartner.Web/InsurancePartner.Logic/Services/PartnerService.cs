@@ -1,3 +1,5 @@
+using InsurancePartner.Data.Models;
+
 namespace InsurancePartner.Logic.Services;
 
 using DTOs;
@@ -9,18 +11,18 @@ using Validators;
 public class PartnerService : IPartnerService
 {
     private readonly IPartnerRepository _partnerRepository;
-    private readonly IPolicyService _policyService;
+    private readonly IPolicyRepository _policyRepository;
     private readonly CreatePartnerValidator _createPartnerValidator;
     private readonly UpdatePartnerValidator _updatePartnerValidator;
 
     public PartnerService(
         IPartnerRepository partnerRepository,
-        IPolicyService policyService,
+        IPolicyRepository policyRepository,
         CreatePartnerValidator createPartnerValidator,
         UpdatePartnerValidator updatePartnerValidator)
     {
         _partnerRepository = partnerRepository;
-        _policyService = policyService;
+        _policyRepository = policyRepository;
         _createPartnerValidator = createPartnerValidator;
         _updatePartnerValidator = updatePartnerValidator;
     }
@@ -53,7 +55,7 @@ public class PartnerService : IPartnerService
         {
             foreach (var policyId in partnerDto.SelectedPolicyIds)
             {
-                var result = await _policyService.AssignPolicyToPartnerAsync(policyId, partnerId);
+                var result = await _policyRepository.AssignPolicyToPartnerAsync(policyId, partnerId);
                 if (result < 0)
                 {
                     return (false, "Failed to assign policy to partner.");
@@ -65,7 +67,7 @@ public class PartnerService : IPartnerService
             : (false, "Failed to create partner.");
     }
 
-    public async Task<(bool IsSuccess, string Message)> UpdatePartnerAsync(PartnerDto partnerDto)
+    public async Task<(bool IsSuccess, string Message)> UpdatePartnerAsync(UpdatePartnerDto partnerDto)
     {
         var validationResult = await _updatePartnerValidator.ValidateAsync(partnerDto);
 
@@ -81,8 +83,27 @@ public class PartnerService : IPartnerService
             return (false, "Partner not found.");
         }
 
-        var partner = PartnerMapper.ToEntity(partnerDto);
+        var existingPolicies = (await _policyRepository.GetPartnerPoliciesAsync(partnerDto.PartnerId)).ToList();
 
+        var policiesToRemove = existingPolicies
+            .Where(p => !partnerDto.SelectedPolicyIds.Contains(p.PolicyId))
+            .ToList();
+
+        foreach (var policy in policiesToRemove)
+        {
+            await _policyRepository.RemovePolicyFromPartnerAsync(policy.PolicyId, partnerDto.PartnerId);
+        }
+
+        var selectedPolicyIdsToAdd = partnerDto.SelectedPolicyIds
+            .Where(id => !existingPolicies.Any(p => p.PolicyId == id))
+            .ToList();
+
+        foreach (var policyId in selectedPolicyIdsToAdd)
+        {
+            await _policyRepository.AssignPolicyToPartnerAsync(policyId, partnerDto.PartnerId);
+        }
+
+        var partner = PartnerMapper.ToEntity(partnerDto, existingPolicies);
         var updateResult = await _partnerRepository.UpdatePartnerAsync(partner);
 
         return !updateResult

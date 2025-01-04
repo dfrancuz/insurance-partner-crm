@@ -15,6 +15,7 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 
 builder.Services.AddScoped<IValidator<CreatePartnerViewModel>, CreatePartnerViewModelValidator>();
+builder.Services.AddScoped<IValidator<EditPartnerViewModel>, EditPartnerViewModelValidator>();
 
 var app = builder.Build();
 

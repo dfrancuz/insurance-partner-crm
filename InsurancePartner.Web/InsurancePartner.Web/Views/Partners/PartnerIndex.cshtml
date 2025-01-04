@@ -37,6 +37,7 @@
                 <th>Created Date</th>
                 <th>Foreign</th>
                 <th>Gender</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -71,6 +72,9 @@
                     </td>
                     <td>
                         @partner.Gender
+                    </td>
+                    <td>
+                        <a asp-action="PartnerEdit" asp-route-partnerId="@partner.PartnerId" class="btn btn-primary btn-sm">Edit</a>
                     </td>
                 </tr>
                 counter++;

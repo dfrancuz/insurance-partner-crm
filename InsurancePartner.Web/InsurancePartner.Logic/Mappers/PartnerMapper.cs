@@ -72,4 +72,28 @@ public class PartnerMapper
             CreatedAtUtc = DateTime.UtcNow
         };
     }
+
+    public static Partner ToEntity(UpdatePartnerDto partnerDto, List<Policy> policies)
+    {
+        if (partnerDto == null)
+        {
+            return null;
+        }
+
+        return new Partner
+        {
+            PartnerId = partnerDto.PartnerId,
+            FirstName = partnerDto.FirstName,
+            LastName = partnerDto.LastName,
+            Address = partnerDto.Address,
+            PartnerNumber = partnerDto.PartnerNumber,
+            CroatianPIN = partnerDto.CroatianPIN,
+            PartnerTypeId = partnerDto.PartnerTypeId,
+            CreateByUser = partnerDto.CreateByUser,
+            IsForeign = partnerDto.IsForeign,
+            ExternalCode = partnerDto.ExternalCode,
+            Gender = partnerDto.Gender,
+            Policies = policies
+        };
+    }
 }

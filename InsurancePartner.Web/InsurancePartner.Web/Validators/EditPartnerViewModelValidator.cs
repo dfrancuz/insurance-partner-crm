@@ -3,9 +3,9 @@ namespace InsurancePartner.Web.Validators;
 using FluentValidation;
 using Models.PartnerViewModels;
 
-public class CreatePartnerViewModelValidator : AbstractValidator<CreatePartnerViewModel>
+public class EditPartnerViewModelValidator : AbstractValidator<EditPartnerViewModel>
 {
-    public CreatePartnerViewModelValidator()
+    public EditPartnerViewModelValidator()
     {
         RuleFor(p => p.FirstName)
             .NotEmpty().WithMessage("First name is required")

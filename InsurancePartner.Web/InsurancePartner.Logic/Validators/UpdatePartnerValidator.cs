@@ -4,7 +4,7 @@ using FluentValidation;
 using InsurancePartner.Data.Interfaces;
 using DTOs;
 
-public class UpdatePartnerValidator : AbstractValidator<PartnerDto>
+public class UpdatePartnerValidator : AbstractValidator<UpdatePartnerDto>
 {
     public UpdatePartnerValidator(IPartnerRepository partnerRepository)
     {

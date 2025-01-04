@@ -130,6 +130,83 @@ public class PartnersController : Controller
 
         TempData["SuccessMessage"] = "Partner created successfully.";
         return RedirectToAction("PartnerIndex");
+    }
 
+    [HttpGet("edit/{partnerId}")]
+    public async Task<IActionResult> PartnerEdit(int partnerId)
+    {
+        var partner = await _partnerService.GetPartnerByIdAsync(partnerId);
+
+        if (partner == null)
+        {
+            return NotFound();
+        }
+
+        var viewModel = new EditPartnerViewModel
+        {
+            PartnerId = partner.PartnerId,
+            FirstName = partner.FirstName,
+            LastName = partner.LastName,
+            Address = partner.Address,
+            PartnerNumber = partner.PartnerNumber,
+            CroatianPIN = partner.CroatianPIN,
+            PartnerTypeId = partner.PartnerTypeId,
+            CreateByUser = partner.CreateByUser,
+            IsForeign = partner.IsForeign,
+            ExternalCode = partner.ExternalCode,
+            Gender = partner.Gender,
+            PartnerTypes = (await _partnerService.GetPartnerTypesAsync()).ToList(),
+            AvailablePolicies = (await _policyService.GetAllPoliciesAsync()).ToList(),
+            SelectedPolicyIds = partner.Policies?.Select(p => p.PolicyId).ToList() ?? []
+        };
+
+        return View(viewModel);
+    }
+
+    [HttpPost("edit/{partnerId}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> PartnerEdit(int partnerId, EditPartnerViewModel viewModel)
+    {
+        if (partnerId != viewModel.PartnerId)
+        {
+            return NotFound();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            viewModel.PartnerTypes = (await _partnerService.GetPartnerTypesAsync()).ToList();
+            viewModel.AvailablePolicies = (await _policyService.GetAllPoliciesAsync()).ToList();
+            return View(viewModel);
+        }
+
+        var updatePartnerDto = new UpdatePartnerDto()
+        {
+            PartnerId = viewModel.PartnerId,
+            FirstName = viewModel.FirstName,
+            LastName = viewModel.LastName,
+            Address = viewModel.Address,
+            PartnerNumber = viewModel.PartnerNumber,
+            CroatianPIN = viewModel.CroatianPIN,
+            PartnerTypeId = viewModel.PartnerTypeId,
+            CreateByUser = viewModel.CreateByUser,
+            IsForeign = viewModel.IsForeign,
+            ExternalCode = viewModel.ExternalCode,
+            Gender = viewModel.Gender,
+            SelectedPolicyIds = viewModel.SelectedPolicyIds
+        };
+
+        var result = await _partnerService.UpdatePartnerAsync(updatePartnerDto);
+
+        if (result.IsSuccess)
+        {
+            TempData["SuccessMessage"] = "Partner updated successfully.";
+            return RedirectToAction("PartnerIndex");
+        }
+
+        ModelState.AddModelError(string.Empty, result.Message);
+        viewModel.PartnerTypes = (await _partnerService.GetPartnerTypesAsync()).ToList();
+        viewModel.AvailablePolicies = (await _policyService.GetAllPoliciesAsync()).ToList();
+
+        return View(viewModel);
     }
 }
