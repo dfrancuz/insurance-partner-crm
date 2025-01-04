@@ -109,3 +109,13 @@
 </div>
 </body>
 </html>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+    <script>
+        $(document).ready(function (){
+            $("form").validate();
+        });
+    </script>
+}

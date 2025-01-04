@@ -118,17 +118,18 @@ public class PartnersController : Controller
 
         var result = await _partnerService.CreatePartnerAsync(createPartnerDto);
 
-        if (result.IsSuccess)
+        if (!result.IsSuccess)
         {
-            TempData["SuccessMessage"] = "Partner created successfully.";
-            return RedirectToAction("PartnerIndex");
+            ModelState.AddModelError(string.Empty, result.Message);
+
+            viewModel.PartnerTypes = (await _partnerService.GetPartnerTypesAsync()).ToList();
+            viewModel.AvailablePolicies = (await _policyService.GetAllPoliciesAsync()).ToList();
+
+            return View(viewModel);
         }
 
-        ModelState.AddModelError(string.Empty, "Unable to create partner.");
+        TempData["SuccessMessage"] = "Partner created successfully.";
+        return RedirectToAction("PartnerIndex");
 
-        viewModel.PartnerTypes = (await _partnerService.GetPartnerTypesAsync()).ToList();
-        viewModel.AvailablePolicies = (await _policyService.GetAllPoliciesAsync()).ToList();
-
-        return View(viewModel);
     }
 }

@@ -28,5 +28,5 @@ public class CreatePartnerViewModel
 
     public List<PolicyDto> AvailablePolicies { get; set; } = [];
 
-    public List<int> SelectedPolicyIds { get; set; } = [];
+    public List<int>? SelectedPolicyIds { get; set; } = [];
 }
