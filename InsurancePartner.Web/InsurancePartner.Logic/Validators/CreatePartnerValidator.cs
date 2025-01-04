@@ -35,9 +35,6 @@ public class CreatePartnerValidator : AbstractValidator<CreatePartnerDto>
             .NotEmpty().WithMessage("Email is required")
             .Matches(@"^[^@\s]+@[^@\s]+\.[^@\s]+$").WithMessage("Must be valid email address");
 
-        RuleFor(p => p.IsForeign)
-            .NotEmpty().WithMessage("Is foreign must be true or false");
-
         RuleFor(p => p.ExternalCode)
             .MustAsync(async (code, _) => !await partnerRepository.ExternalCodeExistsAsync(code))
             .WithMessage("External code must be unique");

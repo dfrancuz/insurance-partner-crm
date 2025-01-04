@@ -18,12 +18,12 @@
     @if (!Model.Any())
     {
         <p>No partners available.</p>
-        <a asp-action="" class="font-weight-bolder text-decoration-none">+ Add Partner</a>
+        <a asp-action="PartnerCreate" class="font-weight-bolder text-decoration-none">+ Add Partner</a>
     }
     else
     {
         <p>
-            <a asp-action="" class="font-weight-bolder text-decoration-none">+ Add Partner</a>
+            <a asp-action="PartnerCreate" class="font-weight-bolder text-decoration-none">+ Add Partner</a>
         </p>
         <h3>Partners</h3>
         <table class="table table-hover">

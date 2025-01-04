@@ -1,5 +1,6 @@
 namespace InsurancePartner.Web.Controllers;
 
+using Logic.DTOs;
 using Logic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Models.PartnerViewModels;
@@ -39,6 +40,7 @@ public class PartnersController : Controller
         return View(viewModels);
     }
 
+    // GET /partners/{id}
     [HttpGet("{partnerId}")]
     public async Task<IActionResult> Details(int partnerId)
     {
@@ -66,5 +68,67 @@ public class PartnersController : Controller
         };
 
         return PartialView("_PartnerDetails", viewModel);
+    }
+
+    // GET /partners/create
+    [HttpGet("create")]
+    public async Task<IActionResult> PartnerCreate()
+    {
+        var partnerTypes = await _partnerService.GetPartnerTypesAsync();
+        var policies = await _policyService.GetAllPoliciesAsync();
+
+        var viewModel = new CreatePartnerViewModel
+        {
+            PartnerTypes = partnerTypes.ToList(),
+            AvailablePolicies = policies.ToList()
+        };
+
+        return View(viewModel);
+    }
+
+    // POST /partners/create
+    [HttpPost("create")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> PartnerCreate(CreatePartnerViewModel viewModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            viewModel.PartnerTypes = (await _partnerService.GetPartnerTypesAsync()).ToList();
+            viewModel.AvailablePolicies = (await _policyService.GetAllPoliciesAsync()).ToList();
+
+            ModelState.AddModelError("", "There are some issues with your input. Please check all fields and try again.");
+
+            return View(viewModel);
+        }
+
+        var createPartnerDto = new CreatePartnerDto
+        {
+            FirstName = viewModel.FirstName,
+            LastName = viewModel.LastName,
+            Address = viewModel.Address,
+            PartnerNumber = viewModel.PartnerNumber,
+            CroatianPIN = viewModel.CroatianPIN,
+            PartnerTypeId = viewModel.PartnerTypeId,
+            CreateByUser = viewModel.CreateByUser,
+            IsForeign = viewModel.IsForeign,
+            ExternalCode = viewModel.ExternalCode,
+            Gender = viewModel.Gender,
+            SelectedPolicyIds = viewModel.SelectedPolicyIds
+        };
+
+        var result = await _partnerService.CreatePartnerAsync(createPartnerDto);
+
+        if (result.IsSuccess)
+        {
+            TempData["SuccessMessage"] = "Partner created successfully.";
+            return RedirectToAction("PartnerIndex");
+        }
+
+        ModelState.AddModelError(string.Empty, "Unable to create partner.");
+
+        viewModel.PartnerTypes = (await _partnerService.GetPartnerTypesAsync()).ToList();
+        viewModel.AvailablePolicies = (await _policyService.GetAllPoliciesAsync()).ToList();
+
+        return View(viewModel);
     }
 }
