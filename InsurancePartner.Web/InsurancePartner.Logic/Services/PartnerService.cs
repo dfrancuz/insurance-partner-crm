@@ -122,7 +122,10 @@ public class PartnerService : IPartnerService
 
         if (partner.Policies.Any())
         {
-            return (false, "Cannot delete partner with associated policies.");
+            return (
+                false,
+                $"Cannot delete the partner because they have {partner.Policies.Count} associated policies. " +
+                $"Please unassign or remove them before deleting partner.");
         }
 
         var deleted = await _partnerRepository.DeletePartnerAsync(partnerId);

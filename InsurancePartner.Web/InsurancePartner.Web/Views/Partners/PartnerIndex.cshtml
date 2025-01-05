@@ -38,6 +38,7 @@
                 <th>Foreign</th>
                 <th>Gender</th>
                 <th></th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -74,7 +75,10 @@
                         @partner.Gender
                     </td>
                     <td>
-                        <a asp-action="PartnerEdit" asp-route-partnerId="@partner.PartnerId" class="btn btn-primary btn-sm">Edit</a>
+                        <div class="btn-group" role="group">
+                            <a asp-action="PartnerEdit" asp-route-partnerId="@partner.PartnerId" class="btn btn-primary btn-sm">Edit</a>
+                            <a asp-action="PartnerDelete" asp-route-partnerId="@partner.PartnerId" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
                     </td>
                 </tr>
                 counter++;

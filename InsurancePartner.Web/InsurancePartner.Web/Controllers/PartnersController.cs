@@ -96,7 +96,7 @@ public class PartnersController : Controller
             viewModel.PartnerTypes = (await _partnerService.GetPartnerTypesAsync()).ToList();
             viewModel.AvailablePolicies = (await _policyService.GetAllPoliciesAsync()).ToList();
 
-            ModelState.AddModelError("", "There are some issues with your input. Please check all fields and try again.");
+            ModelState.AddModelError(string.Empty, "There are some issues with your input. Please check all fields and try again.");
 
             return View(viewModel);
         }
@@ -132,6 +132,7 @@ public class PartnersController : Controller
         return RedirectToAction("PartnerIndex");
     }
 
+    // GET /partners/edit/{id}
     [HttpGet("edit/{partnerId}")]
     public async Task<IActionResult> PartnerEdit(int partnerId)
     {
@@ -163,6 +164,7 @@ public class PartnersController : Controller
         return View(viewModel);
     }
 
+    // POST /partners/edit/{id}
     [HttpPost("edit/{partnerId}")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> PartnerEdit(int partnerId, EditPartnerViewModel viewModel)
@@ -208,5 +210,51 @@ public class PartnersController : Controller
         viewModel.AvailablePolicies = (await _policyService.GetAllPoliciesAsync()).ToList();
 
         return View(viewModel);
+    }
+
+    // GET partners/delete/{id}
+    [HttpGet("delete/{partnerId}")]
+    public async Task<IActionResult> PartnerDelete(int partnerId)
+    {
+        var partner = await _partnerService.GetPartnerByIdAsync(partnerId);
+
+        if (partner == null)
+        {
+            return NotFound();
+        }
+
+        var viewModel = new DeletePartnerViewModel
+        {
+            PartnerId = partner.PartnerId,
+            FullName = partner.FullName,
+            Address = partner.Address,
+            PartnerNumber = partner.PartnerNumber,
+            CroatianPIN = partner.CroatianPIN,
+            PartnerTypeId = partner.PartnerTypeId,
+            CreatedAtUtc = partner.CreatedAtUtc,
+            CreateByUser = partner.CreateByUser,
+            IsForeign = partner.IsForeign,
+            ExternalCode = partner.ExternalCode,
+            Gender = partner.Gender,
+            Policies = partner.Policies?.ToList()
+        };
+
+        return View(viewModel);
+    }
+
+    // POST /partners/delete/{id}
+    [HttpPost("delete/{partnerId}")]
+    public async Task<IActionResult> PartnerDeleteConfirmed(int partnerId)
+    {
+        var result = await _partnerService.DeletePartnerAsync(partnerId);
+
+        if (result.IsSuccess)
+        {
+            TempData["SuccessMessage"] = "Partner deleted successfully.";
+            return RedirectToAction("PartnerIndex");
+        }
+
+        TempData["ErrorMessage"] = result.Message;
+        return RedirectToAction("PartnerDelete", new {partnerId});
     }
 }
