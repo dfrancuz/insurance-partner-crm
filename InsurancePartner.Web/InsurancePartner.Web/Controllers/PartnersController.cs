@@ -245,6 +245,7 @@ public class PartnersController : Controller
 
     // POST /partners/delete/{id}
     [HttpPost("delete/{partnerId}")]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> PartnerDeleteConfirmed(int partnerId)
     {
         var result = await _partnerService.DeletePartnerAsync(partnerId);

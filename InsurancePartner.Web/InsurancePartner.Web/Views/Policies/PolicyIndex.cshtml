@@ -18,12 +18,12 @@
     @if (!Model.Any())
     {
     <p>No policies available.</p>
-    <a asp-action="" class="font-weight-bolder text-decoration-none">+ Add Policy</a>
+    <a asp-action="PolicyCreate" class="font-weight-bolder text-decoration-none">+ Add Policy</a>
     }
     else
     {
     <p>
-        <a asp-action="" class="font-weight-bolder text-decoration-none">+ Add Policy</a>
+        <a asp-action="PolicyCreate" class="font-weight-bolder text-decoration-none">+ Add Policy</a>
     </p>
     <h3>Policies</h3>
     <table class="table table-hover">
@@ -42,7 +42,7 @@
         }
         @foreach (var policy in Model)
         {
-        <tr @(TempData["NewPolicyCreated"] != null && counter == 1 ? "highlight-new" : "")
+        <tr class="@(TempData["NewPolicyCreated"] != null && counter == 1 ? "highlight-new" : "")"
             data-policy-id="@policy.PolicyId"
             style="cursor: pointer">
             <td>

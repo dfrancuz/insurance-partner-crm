@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using InsurancePartner.Data.DependencyInjection;
 using InsurancePartner.Logic.DependencyInjection;
 using InsurancePartner.Web.Models.PartnerViewModels;
+using InsurancePartner.Web.Models.PolicyViewModels;
 using InsurancePartner.Web.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,8 @@ builder.Services.AddFluentValidationClientsideAdapters();
 
 builder.Services.AddScoped<IValidator<CreatePartnerViewModel>, CreatePartnerViewModelValidator>();
 builder.Services.AddScoped<IValidator<EditPartnerViewModel>, EditPartnerViewModelValidator>();
+
+builder.Services.AddScoped<IValidator<CreatePolicyViewModel>, CreatePolicyViewModelValidator>();
 
 var app = builder.Build();
 
