@@ -38,7 +38,6 @@
                 <th>Foreign</th>
                 <th>Gender</th>
                 <th></th>
-                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -48,7 +47,7 @@
             @foreach (var partner in Model)
             {
                 <tr class="partner-row @(partner.HasSpecialStatus ? "table-info" : "")
-                           @(TempData["SuccessMessage"] != null && counter == 1 ? "highlight-new" : "")"
+                           @(TempData["NewPartnerCreated"] != null && counter == 1 ? "highlight-new" : "")"
                     data-partner-id="@partner.PartnerId"
                     style="cursor: pointer">
                     <td>

@@ -129,7 +129,7 @@ public class PartnersController : Controller
             return View(viewModel);
         }
 
-        TempData["SuccessMessage"] = "Partner created successfully.";
+        TempData["NewPartnerCreated"] = true;
         return RedirectToAction("PartnerIndex");
     }
 

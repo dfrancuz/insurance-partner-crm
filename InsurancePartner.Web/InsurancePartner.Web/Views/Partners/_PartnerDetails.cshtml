@@ -65,7 +65,7 @@
                 {
                     <tr>
                         <td>@policy.PolicyNumber</td>
-                        <td>@policy.Amount.ToString("C")</td>
+                        <td>@policy.Amount.ToString("C", new System.Globalization.CultureInfo("hr-HR"))</td>
                     </tr>
                 }
                 </tbody>
