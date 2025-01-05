@@ -73,6 +73,21 @@
         </div>
     </div>
 }
+@if (Model.Policies?.Any() == true)
+{
+    <div class="row mt-4">
+        <div class="col-12">
+            <h6>Summary</h6>
+            <dl class="row">
+                <dt class="col-sm-4">Total Policies</dt>
+                <dd class="col-sm-8">@Model.Policies.Count()</dd>
+
+                <dt class="col-sm-4">Total Amount</dt>
+                <dd class="col-sm-8">@Model.Policies.Sum(p => p.Amount).ToString("C")</dd>
+            </dl>
+        </div>
+    </div>
+}
 </div>
 </body>
 </html>
