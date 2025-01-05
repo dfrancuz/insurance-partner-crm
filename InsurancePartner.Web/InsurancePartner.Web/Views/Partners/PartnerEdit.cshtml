@@ -100,6 +100,11 @@
             <label asp-for="SelectedPolicyIds">Select Policies</label>
             <select asp-for="SelectedPolicyIds" asp-items="@(new SelectList(Model.AvailablePolicies, "PolicyId", "PolicyNumber"))" class="form-control" multiple>
             </select>
+            <small class="text-muted">
+                To select multiple policies, either <b>hold</b> the <b>Ctrl</b> key and click on individual ones, or click and drag to select a range.
+                <br>
+                To deselect policies, <b>hold</b> the <b>Ctrl</b> key and click on the ones you wish to remove.
+            </small>
             <span asp-validation-for="SelectedPolicyIds" class="text-danger"></span>
         </div>
 
