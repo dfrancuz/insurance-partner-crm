@@ -15,37 +15,38 @@
     <h2>Create New Partner</h2>
 
     <form asp-action="PartnerCreate" method="post">
+        @Html.AntiForgeryToken()
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <label asp-for="FirstName">First Name</label>
-                    <input asp-for="FirstName" class="form-control" />
+                    <input asp-for="FirstName" class="form-control"/>
                     <span asp-validation-for="FirstName" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
                     <label asp-for="LastName">Last Name</label>
-                    <input asp-for="LastName" class="form-control" />
+                    <input asp-for="LastName" class="form-control"/>
                     <span asp-validation-for="LastName" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
                     <label asp-for="Address">Address</label>
-                    <input asp-for="Address" class="form-control" />
+                    <input asp-for="Address" class="form-control"/>
                     <span asp-validation-for="Address" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
                     <label asp-for="PartnerNumber">Partner Number</label>
-                    <input asp-for="PartnerNumber" class="form-control" />
+                    <input asp-for="PartnerNumber" class="form-control"/>
                     <span asp-validation-for="PartnerNumber" class="text-danger"></span>
                 </div>
 
                 <div class="form-group">
                     <label asp-for="CroatianPIN">Croatian PIN</label>
-                    <input asp-for="CroatianPIN" class="form-control" />
+                    <input asp-for="CroatianPIN" class="form-control"/>
                     <span asp-validation-for="CroatianPIN" class="text-danger"></span>
                 </div>
             </div>
@@ -63,7 +64,7 @@
 
                 <div class="form-group">
                     <label asp-for="CreateByUser">Email</label>
-                    <input asp-for="CreateByUser" class="form-control" />
+                    <input asp-for="CreateByUser" class="form-control"/>
                     <span asp-validation-for="CreateByUser" class="text-danger"></span>
                 </div>
 
@@ -78,7 +79,7 @@
 
                 <div class="form-group">
                     <label asp-for="ExternalCode">External Code</label>
-                    <input asp-for="ExternalCode" class="form-control" />
+                    <input asp-for="ExternalCode" class="form-control"/>
                     <span asp-validation-for="ExternalCode" class="text-danger"></span>
                 </div>
 
