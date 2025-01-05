@@ -83,7 +83,7 @@
                 <dd class="col-sm-8">@Model.Policies.Count()</dd>
 
                 <dt class="col-sm-4">Total Amount</dt>
-                <dd class="col-sm-8">@Model.Policies.Sum(p => p.Amount).ToString("C")</dd>
+                <dd class="col-sm-8">@Model.Policies.Sum(p => p.Amount).ToString("C", new System.Globalization.CultureInfo("hr-HR"))</dd>
             </dl>
         </div>
     </div>
