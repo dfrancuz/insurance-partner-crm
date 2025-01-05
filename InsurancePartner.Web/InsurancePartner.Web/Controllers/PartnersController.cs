@@ -23,12 +23,6 @@ public class PartnersController : Controller
     {
         var partners = await _partnerService.GetAllPartnersAsync();
 
-        foreach (var partner in partners)
-        {
-            // Add this temporary debugging line
-            Console.WriteLine($"Partner {partner.FullName}: Policies count = {partner.Policies?.Count ?? 0}, Total amount = {partner.Policies?.Sum(x => x.Amount) ?? 0}");
-        }
-
         var viewModels = partners.Select(p => new PartnerListViewModel
         {
             PartnerId = p.PartnerId,

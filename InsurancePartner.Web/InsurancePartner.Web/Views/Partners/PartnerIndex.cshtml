@@ -47,7 +47,8 @@
             }
             @foreach (var partner in Model)
             {
-                <tr class="partner-row @(partner.HasSpecialStatus ? "table-info" : "")"
+                <tr class="partner-row @(partner.HasSpecialStatus ? "table-info" : "")
+                           @(TempData["SuccessMessage"] != null && counter == 1 ? "highlight-new" : "")"
                     data-partner-id="@partner.PartnerId"
                     style="cursor: pointer">
                     <td>
