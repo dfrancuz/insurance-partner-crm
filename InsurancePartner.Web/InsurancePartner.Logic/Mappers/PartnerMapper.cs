@@ -26,7 +26,9 @@ public class PartnerMapper
             IsForeign = partner.IsForeign,
             ExternalCode = partner.ExternalCode,
             Gender = partner.Gender,
-            Policies = partner.Policies.Select(PolicyMapper.ToDto).ToList()
+            Policies = partner.Policies.Select(PolicyMapper.ToDto).ToList(),
+            PolicyCount = partner.PolicyCount,
+            TotalPolicyAmount = partner.TotalPolicyAmount ?? 0
         };
     }
 

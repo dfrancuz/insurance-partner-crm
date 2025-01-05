@@ -22,6 +22,13 @@ public class PartnersController : Controller
     public async Task<IActionResult> PartnerIndex()
     {
         var partners = await _partnerService.GetAllPartnersAsync();
+
+        foreach (var partner in partners)
+        {
+            // Add this temporary debugging line
+            Console.WriteLine($"Partner {partner.FullName}: Policies count = {partner.Policies?.Count ?? 0}, Total amount = {partner.Policies?.Sum(x => x.Amount) ?? 0}");
+        }
+
         var viewModels = partners.Select(p => new PartnerListViewModel
         {
             PartnerId = p.PartnerId,
@@ -32,9 +39,9 @@ public class PartnersController : Controller
             CreatedAtUtc = p.CreatedAtUtc,
             IsForeign = p.IsForeign,
             Gender = p.Gender,
-            TotalPolicies = p.Policies?.Count ?? 0,
-            TotalPolicyAmount = p.Policies?.Sum(x => x.Amount) ?? 0,
-            HasSpecialStatus = (p.Policies?.Count ?? 0) > 5 || (p.Policies?.Sum(x => x.Amount) ?? 0) > 5000,
+            TotalPolicies = p.PolicyCount,
+            TotalPolicyAmount = p.TotalPolicyAmount,
+            HasSpecialStatus = p.PolicyCount > 5 || p.TotalPolicyAmount > 5000
         }).OrderByDescending(p => p.CreatedAtUtc);
 
         return View(viewModels);

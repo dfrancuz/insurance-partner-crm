@@ -21,7 +21,7 @@ public class PartnerRepository : IPartnerRepository
         const string sql =
             @"SELECT p.*,
                      COUNT(pol.PolicyId) as PolicyCount,
-                     SUM(pol.Amount) as TotalPolicyAmount 
+                     COALESCE(SUM(pol.Amount), 0) as TotalPolicyAmount 
               FROM Partners p 
               LEFT JOIN PolicyPartners pp ON p.PartnerId = pp.PartnerId
               LEFT JOIN Policies pol ON pp.PolicyId = pol.PolicyId
