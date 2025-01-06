@@ -19,19 +19,28 @@ The process takes approximately 5-10 minutes.
 * Check the status of your SQL Server instance:
   * If it is **Stopped**, right-click on the instance and select **Start** to initiate it.
 
+![SQL Server Configuration Manager](/Database/Assets/sql-server-configuration-manager.png)
+
 2️⃣ <ins>**Launch SQL Server Management Studio (SSMS)**</ins>
 * Open SSMS and connect to your SQL Server instance.
 * In the Object Explorer on the left-hand side, locate the **Databases** folder.
 * Right-click on **Databases** and select **Import Data-tier Application...**
 
+![Import Data-Tier Application](/Database/Assets/import-data-tier-application.png)
+
 3️⃣ <ins>**Select the .bacpac File**</ins>
 * In the wizard that appears, navigate to the `Database/InsurancePartner.bacpac` file.
+![Select Bacpac File](/Database/Assets/select-bacpac-file.png)
 * Select the file and click **Next**
 * Follow the wizard's steps, keeping default settings.
+
+![Successful Import](/Database/Assets/successful-import.png)
 
 4️⃣ <ins>**Verify the Import**</ins>
 * Once completed, refresh the **Databases** folder.
 * Verify that the InsurancePartners database appears with all required tables.
+
+![Insurance Partner Tables](/Database/Assets/insurance-partner-tables.png)
 
 ## 🖥️ $${\color{#F96167}Method \space 2: \space Running \space SQL \space Scripts}$$
 If you prefer to build the database step by step, you can execute the provided SQL scripts in the following order:
