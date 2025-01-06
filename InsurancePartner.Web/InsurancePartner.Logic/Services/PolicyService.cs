@@ -57,7 +57,7 @@ public class PolicyService : IPolicyService
         }
     }
 
-    public async Task<(bool IsSuccess, string Message)> UpdatePolicyAsync(PolicyDto policyDto)
+    public async Task<(bool IsSuccess, string Message)> UpdatePolicyAsync(UpdatePolicyDto policyDto)
     {
         var validationResult = await _updatePolicyValidator.ValidateAsync(policyDto);
 

@@ -46,4 +46,19 @@ public class PolicyMapper
             CreatedAtUtc = DateTime.UtcNow
         };
     }
+
+    public static Policy ToEntity(UpdatePolicyDto policyDto)
+    {
+        if (policyDto == null)
+        {
+            return null;
+        }
+
+        return new Policy
+        {
+            PolicyId = policyDto.PolicyId,
+            PolicyNumber = policyDto.PolicyNumber,
+            Amount = policyDto.Amount
+        };
+    }
 }

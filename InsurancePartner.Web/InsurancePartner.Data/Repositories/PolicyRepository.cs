@@ -67,8 +67,7 @@ public class PolicyRepository : IPolicyRepository
         const string sql =
             @"UPDATE Policies
               SET PolicyNumber = @PolicyNumber,
-                  Amount = @Amount,
-                  CreatedAtUtc = @CreatedAtUtc
+                  Amount = @Amount
               WHERE PolicyId = @PolicyId";
 
         var affectedRows = await connection.ExecuteAsync(sql, policy);

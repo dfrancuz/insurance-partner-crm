@@ -4,7 +4,7 @@ using DTOs;
 using FluentValidation;
 using InsurancePartner.Data.Interfaces;
 
-public class UpdatePolicyValidator : AbstractValidator<PolicyDto>
+public class UpdatePolicyValidator : AbstractValidator<UpdatePolicyDto>
 {
     public UpdatePolicyValidator(IPolicyRepository policyRepository)
     {
@@ -22,8 +22,5 @@ public class UpdatePolicyValidator : AbstractValidator<PolicyDto>
         RuleFor(p => p.Amount)
             .NotEmpty().WithMessage("Amount is required")
             .GreaterThan(0).WithMessage("Amount must be greater than 0");
-
-        RuleFor(p => p.CreatedAtUtc)
-            .Equal(p => p.CreatedAtUtc).WithMessage("Creation date cannot be modified");
     }
 }

@@ -10,7 +10,7 @@ public interface IPolicyService
 
     Task<(bool IsSuccess, string Message)> CreatePolicyAsync(CreatePolicyDto policyDto);
 
-    Task<(bool IsSuccess, string Message)> UpdatePolicyAsync(PolicyDto policyDto);
+    Task<(bool IsSuccess, string Message)> UpdatePolicyAsync(UpdatePolicyDto policyDto);
 
     Task<(bool IsSuccess, string Message)> DeletePolicyAsync(int policyId);
 

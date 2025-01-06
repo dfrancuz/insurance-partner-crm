@@ -69,4 +69,61 @@ public class PoliciesController : Controller
         TempData["NewPolicyCreated"] = true;
         return RedirectToAction("PolicyIndex");
     }
+
+    // GET /policies/edit/{id}
+    [HttpGet("edit/{policyId}")]
+    public async Task<IActionResult> PolicyEdit(int policyId)
+    {
+        var policy = await _policyService.GetPolicyByIdAsync(policyId);
+
+        if (policy == null)
+        {
+            return NotFound();
+        }
+
+        var viewModel = new EditPolicyViewModel
+        {
+            PolicyId = policy.PolicyId,
+            PolicyNumber = policy.PolicyNumber,
+            Amount = policy.Amount
+        };
+
+        return View(viewModel);
+    }
+
+    // POST /policies/edit/{id}
+    [HttpPost("edit/{policyId}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> PolicyEdit(int policyId, EditPolicyViewModel viewModel)
+    {
+        if (policyId != viewModel.PolicyId)
+        {
+            return NotFound();
+        }
+
+        if (!ModelState.IsValid)
+        {
+            ModelState.AddModelError(string.Empty, "Something went wrong with your request.");
+            return View(viewModel);
+        }
+
+        var updatePolicyDto = new UpdatePolicyDto
+        {
+            PolicyId = viewModel.PolicyId,
+            PolicyNumber = viewModel.PolicyNumber,
+            Amount = viewModel.Amount
+        };
+
+        var result = await _policyService.UpdatePolicyAsync(updatePolicyDto);
+
+        if (result.IsSuccess)
+        {
+            TempData["SuccessMessage"] = "Policy updated successfully";
+            return RedirectToAction("PolicyIndex");
+        }
+
+        ModelState.AddModelError(string.Empty, result.Message);
+
+        return View(viewModel);
+    }
 }
