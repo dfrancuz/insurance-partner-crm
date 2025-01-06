@@ -140,14 +140,4 @@ public class PartnerService : IPartnerService
         var types = await _partnerRepository.GetPartnerTypesAsync();
         return types.Select(PartnerTypeMapper.ToDto);
     }
-
-    public async Task<bool> ExternalCodeExistsAsync(string externalCode)
-    {
-        return await _partnerRepository.ExternalCodeExistsAsync(externalCode);
-    }
-
-    public async Task<bool> PartnerNumberExistsAsync(string partnerNumber)
-    {
-        return await _partnerRepository.PartnerNumberExistsAsync(partnerNumber);
-    }
 }

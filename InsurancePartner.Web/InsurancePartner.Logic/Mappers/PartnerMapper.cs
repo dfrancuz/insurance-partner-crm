@@ -32,26 +32,6 @@ public class PartnerMapper
         };
     }
 
-    public static Partner ToEntity(PartnerDto partnerDto)
-    {
-        return new Partner
-        {
-            PartnerId = partnerDto.PartnerId,
-            FirstName = partnerDto.FirstName,
-            LastName = partnerDto.LastName,
-            Address = partnerDto.Address,
-            PartnerNumber = partnerDto.PartnerNumber,
-            CroatianPIN = partnerDto.CroatianPIN,
-            PartnerTypeId = partnerDto.PartnerTypeId,
-            CreateByUser = partnerDto.CreateByUser,
-            IsForeign = partnerDto.IsForeign,
-            ExternalCode = partnerDto.ExternalCode,
-            Gender = partnerDto.Gender,
-            CreatedAtUtc = partnerDto.CreatedAtUtc,
-            Policies = partnerDto.Policies.Select(PolicyMapper.ToEntity).ToList()
-        };
-    }
-
     public static Partner ToEntity(CreatePartnerDto partnerDto)
     {
         if (partnerDto == null)
