@@ -40,7 +40,7 @@ public class PolicyService : IPolicyService
             return (false, string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
         }
 
-        if (await PolicyNumberExistsAsync(policyDto.PolicyNumber))
+        if (await _policyRepository.PolicyNumberExistsAsync(policyDto.PolicyNumber))
         {
             return (false, $"Policy number already exists: {policyDto.PolicyNumber}");
         }
@@ -57,7 +57,7 @@ public class PolicyService : IPolicyService
         }
     }
 
-    public async Task<(bool IsSuccess, string Message)> UpdatePolicyAsync(PolicyDto policyDto)
+    public async Task<(bool IsSuccess, string Message)> UpdatePolicyAsync(UpdatePolicyDto policyDto)
     {
         var validationResult = await _updatePolicyValidator.ValidateAsync(policyDto);
 
@@ -94,40 +94,5 @@ public class PolicyService : IPolicyService
         {
             return (false, $"Error deleting policy: {e.Message}");
         }
-    }
-
-    public async Task<int> AssignPolicyToPartnerAsync(int policyId, int partnerId)
-    {
-        try
-        {
-            return await _policyRepository.AssignPolicyToPartnerAsync(policyId, partnerId);
-        }
-        catch (Exception e)
-        {
-            throw new InvalidOperationException($"Failed to assign policy to partner {e.Message}");
-        }
-    }
-
-    public async Task<IEnumerable<PolicyDto>> GetPartnerPoliciesAsync(int partnerId)
-    {
-        var policies = await _policyRepository.GetPartnerPoliciesAsync(partnerId);
-        return policies.Select(PolicyMapper.ToDto);
-    }
-
-    public async Task<bool> RemovePolicyFromPartnerAsync(int policyId, int partnerId)
-    {
-        try
-        {
-            return await _policyRepository.RemovePolicyFromPartnerAsync(policyId, partnerId);
-        }
-        catch (Exception e)
-        {
-            throw new InvalidOperationException($"Failed to remove policy {e.Message}");
-        }
-    }
-
-    public async Task<bool> PolicyNumberExistsAsync(string policyNumber)
-    {
-        return await _policyRepository.PolicyNumberExistsAsync(policyNumber);
     }
 }

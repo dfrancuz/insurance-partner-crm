@@ -1,0 +1,124 @@
+@model IEnumerable<InsurancePartner.Web.Models.PartnerViewModels.PartnerListViewModel>
+
+@{
+    ViewData["Title"] = "Partners";
+}
+
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+    <title>Partners</title>
+</head>
+<body>
+<div class="text-center">
+    <p class="display-4">Welcome to the Partners Page</p>
+</div>
+<div class="text-center">
+    @if (!Model.Any())
+    {
+        <p>No partners available.</p>
+        <a asp-action="PartnerCreate" class="font-weight-bolder text-decoration-none">+ Add Partner</a>
+    }
+    else
+    {
+        <p>
+            <a asp-action="PartnerCreate" class="font-weight-bolder text-decoration-none">+ Add Partner</a>
+        </p>
+        <h3>Partners</h3>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>No.</th>
+                <th>Full Name</th>
+                <th>Partner Number</th>
+                <th>Croatian PIN</th>
+                <th>Partner Type</th>
+                <th>Created Date</th>
+                <th>Foreign</th>
+                <th>Gender</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+                var counter = 1;
+            }
+            @foreach (var partner in Model)
+            {
+                <tr class="partner-row @(partner.HasSpecialStatus ? "table-info" : "")
+                           @(TempData["NewPartnerCreated"] != null && counter == 1 ? "highlight-new" : "")"
+                    data-partner-id="@partner.PartnerId"
+                    style="cursor: pointer">
+                    <td>
+                        @counter.
+                    </td>
+                    <td>
+                        @(partner.HasSpecialStatus ? "* " : "")@partner.FullName
+                    </td>
+                    <td>
+                        @partner.PartnerNumber
+                    </td>
+                    <td>
+                        @partner.CroatianPIN
+                    </td>
+                    <td>
+                        @(partner.PartnerTypeId == 1 ? "Personal" : "Legal")
+                    </td>
+                    <td>
+                        @partner.CreatedAtUtc.ToString("g")
+                    </td>
+                    <td>
+                        @(partner.IsForeign ? "Yes" : "No")
+                    </td>
+                    <td>
+                        @partner.Gender
+                    </td>
+                    <td>
+                        <div class="btn-group" role="group">
+                            <a asp-action="PartnerEdit" asp-route-partnerId="@partner.PartnerId" class="btn btn-primary btn-sm">Edit</a>
+                            <a asp-action="PartnerDelete" asp-route-partnerId="@partner.PartnerId" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                    </td>
+                </tr>
+                counter++;
+            }
+            </tbody>
+        </table>
+    }
+</div>
+
+<!-- Modal for partner details -->
+<div class="modal fade" id="partnerDetailsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Partner Details</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Details will be loaded here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+
+@section Scripts {
+    <script>
+    $(document).ready(function() {
+        $('.partner-row').click(function() {
+            var partnerId = $(this).data('partner-id');
+
+            $.get('/partners/' + partnerId, function(data) {
+                $('#partnerDetailsModal .modal-body').html(data);
+                $('#partnerDetailsModal').modal('show');
+            });
+        });
+    });
+</script>
+}

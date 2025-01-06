@@ -4,7 +4,7 @@ using FluentValidation;
 using InsurancePartner.Data.Interfaces;
 using DTOs;
 
-public class UpdatePartnerValidator : AbstractValidator<PartnerDto>
+public class UpdatePartnerValidator : AbstractValidator<UpdatePartnerDto>
 {
     public UpdatePartnerValidator(IPartnerRepository partnerRepository)
     {
@@ -41,9 +41,6 @@ public class UpdatePartnerValidator : AbstractValidator<PartnerDto>
         RuleFor(p => p.CreateByUser)
             .NotEmpty().WithMessage("Email is required")
             .Matches(@"^[^@\s]+@[^@\s]+\.[^@\s]+$").WithMessage("Must be valid email address");
-
-        RuleFor(p => p.IsForeign)
-            .NotEmpty().WithMessage("Is foreign must be true or false");
 
         RuleFor(p => p.ExternalCode)
             .Length(10, 20).WithMessage("External code must be between 10 and 20 characters long")

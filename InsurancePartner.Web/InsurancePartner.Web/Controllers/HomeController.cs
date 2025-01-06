@@ -1,8 +1,8 @@
+namespace InsurancePartner.Web.Controllers;
+
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using InsurancePartner.Web.Models;
-
-namespace InsurancePartner.Web.Controllers;
+using Models;
 
 public class HomeController : Controller
 {
@@ -16,6 +16,7 @@ public class HomeController : Controller
     public IActionResult Index()
     {
         return View();
+        // return RedirectToAction("PartnerIndex", "Partners");
     }
 
     public IActionResult Privacy()

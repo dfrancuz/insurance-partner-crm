@@ -1,0 +1,74 @@
+@model IEnumerable<InsurancePartner.Web.Models.PolicyViewModels.PolicyListViewModel>
+
+@{
+    ViewData["Title"] = "Policies";
+}
+
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+    <title>Policies</title>
+</head>
+<body>
+<div class="text-center">
+    <p class="display-4">Welcome to the Policies Page</p>
+</div>
+<div class="text-center">
+    @if (!Model.Any())
+    {
+    <p>No policies available.</p>
+    <a asp-action="PolicyCreate" class="font-weight-bolder text-decoration-none">+ Add Policy</a>
+    }
+    else
+    {
+    <p>
+        <a asp-action="PolicyCreate" class="font-weight-bolder text-decoration-none">+ Add Policy</a>
+    </p>
+    <h3>Policies</h3>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th>Policy Number</th>
+            <th>Amount</th>
+            <th>Created Date</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        @{
+        var counter = 1;
+        }
+        @foreach (var policy in Model)
+        {
+        <tr class="@(TempData["NewPolicyCreated"] != null && counter == 1 ? "highlight-new" : "")"
+            data-policy-id="@policy.PolicyId"
+            style="cursor: pointer">
+            <td>
+                @counter.
+            </td>
+            <td>
+                @policy.PolicyNumber
+            </td>
+            <td>
+                @policy.Amount.ToString("C", new System.Globalization.CultureInfo("hr-HR"))
+            </td>
+            <td>
+                @policy.CreatedAtUtc.ToString("g")
+            </td>
+            <td>
+                <div class="btn-group pr-0" role="group">
+                    <a asp-action="PolicyEdit" asp-route-policyId="@policy.PolicyId" class="btn btn-primary btn-sm">Edit</a>
+                    <a asp-action="PolicyDelete" asp-route-policyId="@policy.PolicyId" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+            </td>
+        </tr>
+        counter++;
+        }
+        </tbody>
+    </table>
+    }
+</div>
+</body>
+</html>

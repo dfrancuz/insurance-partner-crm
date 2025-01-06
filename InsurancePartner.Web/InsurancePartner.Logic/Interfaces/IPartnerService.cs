@@ -10,13 +10,9 @@ public interface IPartnerService
 
     Task<(bool IsSuccess, string Message)> CreatePartnerAsync(CreatePartnerDto partnerDto);
 
-    Task<(bool IsSuccess, string Message)> UpdatePartnerAsync(PartnerDto partnerDto);
+    Task<(bool IsSuccess, string Message)> UpdatePartnerAsync(UpdatePartnerDto partnerDto);
 
     Task<(bool IsSuccess, string Message)> DeletePartnerAsync(int partnerId);
 
     Task<IEnumerable<PartnerTypeDto>> GetPartnerTypesAsync();
-
-    Task<bool> ExternalCodeExistsAsync(string externalCode);
-
-    Task<bool> PartnerNumberExistsAsync(string partnerNumber);
 }

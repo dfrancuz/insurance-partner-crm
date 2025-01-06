@@ -26,27 +26,9 @@ public class PartnerMapper
             IsForeign = partner.IsForeign,
             ExternalCode = partner.ExternalCode,
             Gender = partner.Gender,
-            Policies = partner.Policies.Select(PolicyMapper.ToDto).ToList()
-        };
-    }
-
-    public static Partner ToEntity(PartnerDto partnerDto)
-    {
-        return new Partner
-        {
-            PartnerId = partnerDto.PartnerId,
-            FirstName = partnerDto.FirstName,
-            LastName = partnerDto.LastName,
-            Address = partnerDto.Address,
-            PartnerNumber = partnerDto.PartnerNumber,
-            CroatianPIN = partnerDto.CroatianPIN,
-            PartnerTypeId = partnerDto.PartnerTypeId,
-            CreateByUser = partnerDto.CreateByUser,
-            IsForeign = partnerDto.IsForeign,
-            ExternalCode = partnerDto.ExternalCode,
-            Gender = partnerDto.Gender,
-            CreatedAtUtc = partnerDto.CreatedAtUtc,
-            Policies = partnerDto.Policies.Select(PolicyMapper.ToEntity).ToList()
+            Policies = partner.Policies.Select(PolicyMapper.ToDto).ToList(),
+            PolicyCount = partner.PolicyCount,
+            TotalPolicyAmount = partner.TotalPolicyAmount ?? 0
         };
     }
 
@@ -70,6 +52,30 @@ public class PartnerMapper
             ExternalCode = partnerDto.ExternalCode,
             Gender = partnerDto.Gender,
             CreatedAtUtc = DateTime.UtcNow
+        };
+    }
+
+    public static Partner ToEntity(UpdatePartnerDto partnerDto, List<Policy> policies)
+    {
+        if (partnerDto == null)
+        {
+            return null;
+        }
+
+        return new Partner
+        {
+            PartnerId = partnerDto.PartnerId,
+            FirstName = partnerDto.FirstName,
+            LastName = partnerDto.LastName,
+            Address = partnerDto.Address,
+            PartnerNumber = partnerDto.PartnerNumber,
+            CroatianPIN = partnerDto.CroatianPIN,
+            PartnerTypeId = partnerDto.PartnerTypeId,
+            CreateByUser = partnerDto.CreateByUser,
+            IsForeign = partnerDto.IsForeign,
+            ExternalCode = partnerDto.ExternalCode,
+            Gender = partnerDto.Gender,
+            Policies = policies
         };
     }
 }

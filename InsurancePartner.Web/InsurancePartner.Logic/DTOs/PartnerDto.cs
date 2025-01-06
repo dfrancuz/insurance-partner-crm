@@ -28,7 +28,9 @@ public class PartnerDto
 
     public char Gender { get; set; }
 
-    public bool IsHighRisk => Policies.Count > 5 || Policies.Sum(p => p.Amount) > 5000;
-
     public List<PolicyDto> Policies { get; set; }
+
+    public int PolicyCount { get; set; }
+
+    public decimal TotalPolicyAmount { get; set; }
 }

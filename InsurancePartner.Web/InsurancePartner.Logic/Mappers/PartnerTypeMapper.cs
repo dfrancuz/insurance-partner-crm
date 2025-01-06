@@ -18,13 +18,4 @@ public class PartnerTypeMapper
             TypeName = partnerType.TypeName
         };
     }
-
-    public static PartnerType ToEntity(PartnerTypeDto partnerTypeDto)
-    {
-        return new PartnerType()
-        {
-            PartnerTypeId = partnerTypeDto.PartnerTypeId,
-            TypeName = partnerTypeDto.TypeName
-        };
-    }
 }

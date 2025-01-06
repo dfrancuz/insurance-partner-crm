@@ -29,4 +29,8 @@ public class Partner
     public char Gender { get; set; }
 
     public List<Policy> Policies { get; set; } = [];
+
+    public int PolicyCount { get; set; }
+
+    public decimal? TotalPolicyAmount { get; set; }
 }

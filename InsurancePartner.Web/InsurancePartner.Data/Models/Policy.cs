@@ -9,6 +9,4 @@ public class Policy
     public decimal Amount { get; set; }
 
     public DateTime CreatedAtUtc { get; set; }
-
-    public List<PolicyPartner> PolicyPartners { get; set; } = [];
 }

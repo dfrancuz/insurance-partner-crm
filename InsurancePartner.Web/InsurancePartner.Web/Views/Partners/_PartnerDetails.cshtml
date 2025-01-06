@@ -1,0 +1,93 @@
+@model InsurancePartner.Web.Models.PartnerViewModels.PartnerDetailsViewModel
+
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+    <title>Modal View</title>
+</head>
+<body>
+<div class="container">
+<div class="row">
+    <div class="col-md-6">
+        <h6>Basic Information</h6>
+        <dl class="row">
+            <dt class="col-sm-4">Full Name</dt>
+            <dd class="col-sm-8">@Model.FullName</dd>
+
+            <dt class="col-sm-4">Address</dt>
+            <dd class="col-sm-8">@Model.Address</dd>
+
+            <dt class="col-sm-4">Partner Number</dt>
+            <dd class="col-sm-8">@Model.PartnerNubmer</dd>
+
+            <dt class="col-sm-4">Croatian PIN</dt>
+            <dd class="col-sm-8">@Model.CroatianPIN</dd>
+
+            <dt class="col-sm-4">Partner Type</dt>
+            <dd class="col-sm-8">@(Model.PartnerTypeId == 1 ? "Personal" : "Legal")</dd>
+        </dl>
+    </div>
+    <div class="col-md-6">
+        <h6>Additional Information</h6>
+        <dl class="row">
+            <dt class="col-sm-4">Created Date</dt>
+            <dd class="col-sm-8">@Model.CreatedAtUtc.ToString("g")</dd>
+
+            <dt class="col-sm-4">Created By</dt>
+            <dd class="col-sm-8">@Model.CreateByUser</dd>
+
+            <dt class="col-sm-4">Foreign</dt>
+            <dd class="col-sm-8">@(Model.IsForeign ? "Yes" : "No")</dd>
+
+            <dt class="col-sm-4">External Code</dt>
+            <dd class="col-sm-8">@Model.ExternalCode</dd>
+
+            <dt class="col-sm-4">Gender</dt>
+            <dd class="col-sm-8">@Model.Gender</dd>
+        </dl>
+    </div>
+</div>
+@if (Model.Policies?.Any() == true)
+{
+    <div class="row mt-4">
+        <div class="col-12">
+            <h6>Policies</h6>
+            <table class="table table-sm">
+                <thead>
+                <tr>
+                    <th>Policy Number</th>
+                    <th>Amount</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var policy in Model.Policies)
+                {
+                    <tr>
+                        <td>@policy.PolicyNumber</td>
+                        <td>@policy.Amount.ToString("C", new System.Globalization.CultureInfo("hr-HR"))</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+@if (Model.Policies?.Any() == true)
+{
+    <div class="row mt-4">
+        <div class="col-12">
+            <h6>Summary</h6>
+            <dl class="row">
+                <dt class="col-sm-4">Total Policies</dt>
+                <dd class="col-sm-8">@Model.Policies.Count()</dd>
+
+                <dt class="col-sm-4">Total Amount</dt>
+                <dd class="col-sm-8">@Model.Policies.Sum(p => p.Amount).ToString("C", new System.Globalization.CultureInfo("hr-HR"))</dd>
+            </dl>
+        </div>
+    </div>
+}
+</div>
+</body>
+</html>

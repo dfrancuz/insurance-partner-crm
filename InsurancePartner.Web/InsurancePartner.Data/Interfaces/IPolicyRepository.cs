@@ -8,6 +8,8 @@ public interface IPolicyRepository
 
     Task<Policy?> GetPolicyByIdAsync(int policyId);
 
+    Task<IEnumerable<Policy>> GetPoliciesByIdsAsync(List<int> policyIds);
+
     Task<int> CreatePolicyAsync(Policy policy);
 
     Task<bool> UpdatePolicyAsync(Policy policy);

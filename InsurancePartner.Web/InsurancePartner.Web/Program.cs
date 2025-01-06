@@ -1,15 +1,41 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using InsurancePartner.Data.DependencyInjection;
+using InsurancePartner.Logic.DependencyInjection;
+using InsurancePartner.Web.Models.PartnerViewModels;
+using InsurancePartner.Web.Models.PolicyViewModels;
+using InsurancePartner.Web.Validators;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
+
+try
+{
+    builder.Services.AddDataLayer(builder.Configuration);
+}
+catch (Exception e)
+{
+    Console.WriteLine($"Database connection failed: {e.Message}");
+    throw;
+}
+
+builder.Services.AddLogicLayer();
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+
+builder.Services.AddScoped<IValidator<CreatePartnerViewModel>, CreatePartnerViewModelValidator>();
+builder.Services.AddScoped<IValidator<EditPartnerViewModel>, EditPartnerViewModelValidator>();
+
+builder.Services.AddScoped<IValidator<CreatePolicyViewModel>, CreatePolicyViewModelValidator>();
+builder.Services.AddScoped<IValidator<EditPolicyViewModel>, EditPolicyViewModelValidator>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 

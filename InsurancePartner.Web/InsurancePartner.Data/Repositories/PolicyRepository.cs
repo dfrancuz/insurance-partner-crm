@@ -34,6 +34,22 @@ public class PolicyRepository : IPolicyRepository
             });
     }
 
+    public async Task<IEnumerable<Policy>> GetPoliciesByIdsAsync(List<int> policyIds)
+    {
+        await using var connection = new SqlConnection(_connectionString);
+        const string sql =
+            @"SELECT * 
+              FROM Policies 
+              WHERE PolicyId IN @PolicyIds";
+
+        return await connection.QueryAsync<Policy>(
+            sql,
+            new
+            {
+                PolicyIds = policyIds
+            });
+    }
+
     public async Task<int> CreatePolicyAsync(Policy policy)
     {
         await using var connection = new SqlConnection(_connectionString);
@@ -51,8 +67,7 @@ public class PolicyRepository : IPolicyRepository
         const string sql =
             @"UPDATE Policies
               SET PolicyNumber = @PolicyNumber,
-                  Amount = @Amount,
-                  CreatedAtUtc = @CreatedAtUtc
+                  Amount = @Amount
               WHERE PolicyId = @PolicyId";
 
         var affectedRows = await connection.ExecuteAsync(sql, policy);
