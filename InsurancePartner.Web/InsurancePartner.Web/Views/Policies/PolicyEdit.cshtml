@@ -1,0 +1,51 @@
+@model InsurancePartner.Web.Models.PolicyViewModels.EditPolicyViewModel
+
+@{
+    ViewData["Title"] = "Update Policy";
+}
+
+<!DOCTYPE html>
+
+<html lang="en-US">
+<head>
+    <title>Update Policy</title>
+</head>
+<body>
+<div class="container">
+    <h2>Edit Partner</h2>
+
+    <form asp-action="PolicyEdit" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="PolicyId"/>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="PolicyNumber">Policy Number</label>
+                    <input asp-for="PolicyNumber" class="form-control"/>
+                    <span asp-validation-for="PolicyNumber" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="Amount">Amount</label>
+                    <input asp-for="Amount" class="form-control"/>
+                    <span asp-validation-for="Amount" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group mt-4">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a asp-action="PolicyIndex" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial"/>
+}
