@@ -9,7 +9,17 @@ using InsurancePartner.Web.Validators;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddDataLayer(builder.Configuration);
+
+try
+{
+    builder.Services.AddDataLayer(builder.Configuration);
+}
+catch (Exception e)
+{
+    Console.WriteLine($"Database connection failed: {e.Message}");
+    throw;
+}
+
 builder.Services.AddLogicLayer();
 
 builder.Services.AddFluentValidationAutoValidation();
