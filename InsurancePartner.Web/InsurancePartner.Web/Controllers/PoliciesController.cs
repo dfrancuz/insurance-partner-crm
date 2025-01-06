@@ -126,4 +126,43 @@ public class PoliciesController : Controller
 
         return View(viewModel);
     }
+
+    // GET policies/delete/{id}
+    [HttpGet("delete/{policyId}")]
+    public async Task<IActionResult> PolicyDelete(int policyId)
+    {
+        var policy = await _policyService.GetPolicyByIdAsync(policyId);
+
+        if (policy == null)
+        {
+            return NotFound();
+        }
+
+        var viewModel = new DeletePolicyViewModel
+        {
+            PolicyId = policy.PolicyId,
+            PolicyNumber = policy.PolicyNumber,
+            Amount = policy.Amount,
+            CreatedAtUtc = policy.CreatedAtUtc
+        };
+
+        return View(viewModel);
+    }
+
+    // POST policies/delete/{id}
+    [HttpPost("delete/{policyId}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> PolicyDeleteConfirmed(int policyId)
+    {
+        var result = await _policyService.DeletePolicyAsync(policyId);
+
+        if (result.IsSuccess)
+        {
+            TempData["SuccessMessage"] = "Policy deleted successfully";
+            return RedirectToAction("PolicyIndex");
+        }
+
+        TempData["ErrorMessage"] = result.Message;
+        return RedirectToAction("PolicyDelete", new { policyId });
+    }
 }

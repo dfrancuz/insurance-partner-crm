@@ -19,6 +19,7 @@ builder.Services.AddScoped<IValidator<CreatePartnerViewModel>, CreatePartnerView
 builder.Services.AddScoped<IValidator<EditPartnerViewModel>, EditPartnerViewModelValidator>();
 
 builder.Services.AddScoped<IValidator<CreatePolicyViewModel>, CreatePolicyViewModelValidator>();
+builder.Services.AddScoped<IValidator<EditPolicyViewModel>, EditPolicyViewModelValidator>();
 
 var app = builder.Build();
 
