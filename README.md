@@ -8,11 +8,18 @@
 1. [Project Overview](#project-overview)
 2. [Technical Requirements](#technical-requirements)
 3. [Getting Started](#getting-started)
+4. [Demo Video](#demo-video)
 
----
+
+<div id="demo-video" align="center">
+
+#### 📽️ [Application Demo Video](https://youtu.be/zELW9x8tSw0?si=ToPkGzuVuxGN35Hi)
+
+</div>
+
 
 <div id="project-overview">
-  
+
 ### Project Overview
 
 </div>
@@ -20,8 +27,6 @@
 #### Objective:
 
 Develop a web application that allows users to manage partners and policies of an insurance company. The application should provide the ability to add partners, view all partners, and manage partner policies.
-
----
 
 <div id="technical-requirements">
 
@@ -56,10 +61,6 @@ Choose one of two methods explained [here](/Database/).
 
 3. #### Launch Application:
 Once the database is configured, the application is ready to be launched. Click the play button in your IDE to start and begin interacting with the app.
-
-
-
-
 
 
 
